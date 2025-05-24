@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}User Profile - Jupy Agenda{% endblock %}
+
+{% block content %}
+    <h2>User Profile</h2>
+    {% if current_user.is_authenticated %}
+        <p><strong>Username:</strong> {{ current_user.username }}</p>
+        <p><strong>Email:</strong> {{ current_user.email }}</p>
+        <!-- Add more profile information here as needed -->
+    {% else %}
+        <p>Please <a href="{{ url_for('auth.login') }}">login</a> to view your profile.</p>
+    {% endif %}
+{% endblock %}

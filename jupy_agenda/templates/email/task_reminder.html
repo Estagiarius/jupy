@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Reminder: {{ item.description[:50] }}...</title>
+</head>
+<body>
+    <p>Hi {{ user.username }},</p>
+    <p>This is a reminder for your task:</p>
+    
+    <p><strong>Description:</strong><br>{{ item.description | nl2br }}</p>
+    
+    {% if item.due_date %}
+    <p><strong>Due Date:</strong> {{ item.due_date.strftime('%Y-%m-%d') }}</p>
+    {% endif %}
+    <p><strong>Priority:</strong> {{ item.priority_display }}</p>
+    
+    <p>You can view your To-Do list <a href="{{ url_for('todo.list_tasks', _external=True) }}">here</a>.</p>
+    
+    <p>Thanks,<br>Jupy Agenda Team</p>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ legend }}</h2>
+    <form method="POST" action=""> {# Action URL will be set by the route #}
+        {{ form.hidden_tag() }} {# CSRF token #}
+        
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(rows=5, cols=60, class="form-control") }}<br>
+            {% if form.description.errors %}
+                <ul class="errors">
+                    {% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.due_date.label }} (e.g., 2024-07-28)<br>
+            {{ form.due_date(class="form-control") }}<br>
+            {% if form.due_date.errors %}
+                <ul class="errors">
+                    {% for error in form.due_date.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.priority.label }}<br>
+            {{ form.priority(class="form-control") }}<br>
+            {% if form.priority.errors %}
+                <ul class="errors">
+                    {% for error in form.priority.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.status.label }}<br>
+            {{ form.status(class="form-control") }}<br>
+            {% if form.status.errors %}
+                <ul class="errors">
+                    {% for error in form.status.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>{{ form.submit(class="btn btn-primary") }}</p>
+    </form>
+
+    <a href="{{ url_for('todo.list_tasks') }}">Back to To-Do List</a>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ legend }}</h2>
+    <form method="POST" action=""> {# Action URL will be set by the route #}
+        {{ form.hidden_tag() }} {# CSRF token #}
+        
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title(size=60, class="form-control") }}<br>
+            {% if form.title.errors %}
+                <ul class="errors">
+                    {% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.content.label }}<br>
+            {{ form.content(rows=15, cols=80, class="form-control", style="font-family: monospace;") }}<br>
+            {% if form.content.errors %}
+                <ul class="errors">
+                    {% for error in form.content.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>{{ form.submit(class="btn btn-primary") }}</p>
+    </form>
+
+    <a href="{{ url_for('diagram.list_diagram_notes') }}">Back to Diagram Notes List</a>
+{% endblock %}

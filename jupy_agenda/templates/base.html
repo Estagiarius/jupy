@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Jupy Agenda{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- You might want to add more CSS or JS links here -->
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('main.index') }}">Home</a> |
+        {% if current_user.is_authenticated %}
+            <span>Welcome, {{ current_user.username }}!</span> |
+            <a href="{{ url_for('calendar.month_view') }}">Calendar</a> |
+            <a href="{{ url_for('todo.list_tasks') }}">To-Do List</a> |
+            <a href="{{ url_for('location.list_locations') }}">Locations</a> |
+            <a href="{{ url_for('diagram.list_diagram_notes') }}">Diagram Notes</a> |
+            <a href="{{ url_for('code_snippet.list_code_snippets') }}">Code Snippets</a> |
+            <a href="{{ url_for('material.list_materials') }}">Learning Materials</a> |
+            <a href="{{ url_for('main.profile') }}">Profile</a> |
+            <a href="{{ url_for('auth.logout') }}">Logout</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Login</a> |
+            <a href="{{ url_for('auth.register') }}">Register</a>
+        {% endif %}
+        <!-- Add other navigation links here -->
+    </nav>
+    <hr>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- You might want to add more JS links here -->
+</body>
+</html>

@@ -1,0 +1,14 @@
+Hi {{ user.username }},
+
+This is a reminder for your task:
+
+Description: {{ item.description }}
+{% if item.due_date %}
+Due Date: {{ item.due_date.strftime('%Y-%m-%d') }}
+{% endif %}
+Priority: {{ item.priority_display }}
+
+You can view your To-Do list here: {{ url_for('todo.list_tasks', _external=True) }}
+
+Thanks,
+Jupy Agenda Team

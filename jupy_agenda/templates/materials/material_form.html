@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <h2>{{ legend }}</h2>
+    {# Ensure enctype for file uploads #}
+    <form method="POST" action="" enctype="multipart/form-data"> 
+        {{ form.hidden_tag() }} {# CSRF token #}
+        
+        <p>
+            {{ form.title.label }}<br>
+            {{ form.title(size=60, class="form-control") }}<br>
+            {% if form.title.errors %}
+                <ul class="errors">
+                    {% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(rows=5, cols=60, class="form-control") }}<br>
+            {% if form.description.errors %}
+                <ul class="errors">
+                    {% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.subject_category.label }}<br>
+            {{ form.subject_category(size=60, class="form-control") }}<br>
+            {% if form.subject_category.errors %}
+                <ul class="errors">
+                    {% for error in form.subject_category.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.upload_date.label }} (e.g., 2024-07-28)<br>
+            {{ form.upload_date(class="form-control") }}<br>
+            {% if form.upload_date.errors %}
+                <ul class="errors">
+                    {% for error in form.upload_date.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        
+        <p>
+            {{ form.file.label }}
+            {% if is_edit %} (Leave empty to keep current file) {% endif %}
+            <br>
+            {{ form.file(class="form-control-file") }}<br>
+            {% if form.file.errors %}
+                <ul class="errors">
+                    {% for error in form.file.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+
+        {% if is_edit and material_id %}
+            {% set material = get_material_by_id(material_id) %} {# Hypothetical function to get material for current file info #}
+            {% if material and material.file_name %}
+            <p><em>Current file: {{ material.file_name }}</em></p>
+            {% endif %}
+        {% endif %}
+        
+        <p>{{ form.submit(class="btn btn-primary") }}</p>
+    </form>
+
+    <a href="{{ url_for('material.list_materials') }}">Back to Learning Materials List</a>
+{% endblock %}

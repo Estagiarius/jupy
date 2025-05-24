@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<style>
+    .location-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .location-table th, .location-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .location-table th {
+        background-color: #f2f2f2;
+    }
+    .location-actions a, .location-actions form {
+        margin-right: 5px;
+        display: inline; /* Keep buttons on the same line */
+    }
+    .pagination {
+        margin-top: 20px;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        color: #337ab7;
+    }
+    .pagination .active a {
+        background-color: #337ab7;
+        color: white;
+        border-color: #337ab7;
+    }
+    .pagination .disabled span {
+        margin: 0 5px;
+        padding: 8px 12px;
+        color: #777;
+        border: 1px solid #ddd;
+    }
+</style>
+
+<h2>{{ title }}</h2>
+
+<a href="{{ url_for('location.add_location') }}" class="btn btn-primary">Add New Location</a>
+
+{% if locations_pagination.items %}
+<table class="location-table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Coordinates (Lat, Lon)</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for location in locations_pagination.items %}
+        <tr>
+            <td><a href="{{ url_for('location.view_location', location_id=location.id) }}">{{ location.name }}</a></td>
+            <td>{{ location.address if location.address else 'N/A' }}</td>
+            <td>
+                {% if location.latitude is not none and location.longitude is not none %}
+                    {{ "%.4f"|format(location.latitude) }}, {{ "%.4f"|format(location.longitude) }}
+                {% else %}
+                    N/A
+                {% endif %}
+            </td>
+            <td class="location-actions">
+                <a href="{{ url_for('location.edit_location', location_id=location.id) }}" class="btn btn-sm btn-info">Edit</a>
+                <form method="POST" action="{{ url_for('location.delete_location', location_id=location.id) }}" onsubmit="return confirm('Are you sure you want to delete this location?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if locations_pagination.pages > 1 %}
+<nav class="pagination">
+    {% if locations_pagination.has_prev %}
+        <a href="{{ url_for('location.list_locations', page=locations_pagination.prev_num) }}">&laquo; Previous</a>
+    {% else %}
+        <span class="disabled">&laquo; Previous</span>
+    {% endif %}
+
+    {% for page_num in locations_pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if locations_pagination.page == page_num %}
+                <span class="active"><a href="{{ url_for('location.list_locations', page=page_num) }}">{{ page_num }}</a></span>
+            {% else %}
+                <a href="{{ url_for('location.list_locations', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            <span class="disabled">...</span>
+        {% endif %}
+    {% endfor %}
+
+    {% if locations_pagination.has_next %}
+        <a href="{{ url_for('location.list_locations', page=locations_pagination.next_num) }}">Next &raquo;</a>
+    {% else %}
+        <span class="disabled">Next &raquo;</span>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<p>No locations found. Why not <a href="{{ url_for('location.add_location') }}">add one</a>?</p>
+{% endif %}
+
+{% endblock %}
