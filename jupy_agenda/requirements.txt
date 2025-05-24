@@ -1,0 +1,18 @@
+Flask>=3.0.0,<4.0.0
+Flask-SQLAlchemy>=3.0.0,<4.0.0
+Flask-Login>=0.6.0,<0.7.0
+Flask-WTF>=1.2.0,<2.0.0
+Werkzeug>=3.0.0,<4.0.0
+SQLAlchemy==1.4.46 # Pinned due to a previous issue note, check if still needed or if latest is fine
+Flask-Mail>=0.10.0,<0.11.0
+gunicorn>=20.0.0,<23.0.0 # Added Gunicorn
+click>=8.0.0,<9.0.0 # For Flask CLI
+python-dotenv>=0.19.0,<1.2.0 # Good for managing .env files locally (optional but good practice)
+blinker>=1.6.0,<2.0.0 # Dependency of Flask/Signals
+Jinja2>=3.0.0,<4.0.0
+itsdangerous>=2.0.0,<3.0.0
+MarkupSafe>=2.0.0,<3.0.0
+WTForms>=3.0.0,<4.0.0
+greenlet>=1.0.0 # Dependency for SQLAlchemy async (though not used explicitly)
+alembic>=1.7.0 # If Flask-Migrate were used, but not used yet. Good for future. (Optional)
+psycopg2-binary>=2.9.0 # If using PostgreSQL (Optional, for deployment example)

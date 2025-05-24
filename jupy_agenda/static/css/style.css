@@ -1,20 +1,333 @@
 /* Basic styles for Jupy Agenda */
 body {
-    font-family: sans-serif;
+    font-family: Arial, sans-serif; /* More common sans-serif font */
     margin: 0;
-    padding: 20px;
-    background-color: #f4f4f4;
-    color: #333;
+    padding: 0; /* Remove default padding */
+    background-color: #f8f9fa; /* Lighter grey */
+    color: #212529; /* Darker text for better contrast */
+    line-height: 1.6;
 }
 
 .container {
-    width: 80%;
-    margin: auto;
-    background-color: #fff;
+    width: 90%; /* More responsive width */
+    max-width: 1200px; /* Max width for large screens */
+    margin: 20px auto; /* Add top/bottom margin */
+    background-color: #ffffff;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px; /* Rounded corners for container */
 }
 
-h1 {
-    color: #333;
+/* Navigation */
+nav {
+    background-color: #007bff; /* Primary blue */
+    padding: 10px 20px;
+    color: white;
+    display: flex; /* For better alignment and spacing */
+    justify-content: space-between; /* Space out logo/title and links */
+    align-items: center;
+    flex-wrap: wrap; /* Allow nav items to wrap on smaller screens */
+}
+
+nav a, nav span {
+    color: white;
+    text-decoration: none;
+    margin-right: 15px;
+    padding: 5px 0; /* Add some padding for touch targets */
+}
+nav a:hover {
+    text-decoration: underline;
+}
+nav .brand { /* For a potential logo or app name */
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-right: auto; /* Push other links to the right */
+}
+
+
+/* Headings & Text */
+h1, h2, h3, h4, h5, h6 {
+    color: #343a40; /* Dark grey for headings */
+    margin-top: 1.5em; /* Add more space above headings */
+    margin-bottom: 0.5em;
+}
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.8em; }
+h3 { font-size: 1.5em; }
+
+p {
+    margin-bottom: 1em;
+}
+
+/* Forms */
+form p { /* Add spacing between form elements */
+    margin-bottom: 15px;
+}
+label {
+    display: block; /* Make labels take full width for better readability */
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #495057;
+}
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="datetime-local"], /* For DateTimeField */
+input[type="number"], /* For FloatField */
+textarea,
+select {
+    width: 100%; /* Make form elements take full width */
+    padding: 10px;
+    border: 1px solid #ced4da; /* Lighter border */
+    border-radius: 4px;
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
+    font-size: 1em;
+}
+textarea {
+    min-height: 100px; /* Minimum height for textareas */
+}
+
+/* Ensure specific input types don't get overly wide if 100% is too much */
+input[type="checkbox"], input[type="radio"] {
+    width: auto; /* Override 100% width for checkboxes/radios */
+    margin-right: 5px;
+}
+
+
+/* Buttons */
+.btn, input[type="submit"], button[type="submit"] {
+    display: inline-block;
+    padding: 10px 15px;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    color: #ffffff;
+    background-color: #007bff; /* Primary blue */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+.btn:hover, input[type="submit"]:hover, button[type="submit"]:hover {
+    background-color: #0056b3; /* Darker blue */
+}
+.btn-primary { background-color: #007bff; }
+.btn-primary:hover { background-color: #0056b3; }
+.btn-secondary { background-color: #6c757d; } /* Grey */
+.btn-secondary:hover { background-color: #545b62; }
+.btn-success { background-color: #28a745; } /* Green */
+.btn-success:hover { background-color: #1e7e34; }
+.btn-danger { background-color: #dc3545; } /* Red */
+.btn-danger:hover { background-color: #b02a37; }
+.btn-info { background-color: #17a2b8; } /* Teal */
+.btn-info:hover { background-color: #117a8b; }
+.btn-warning { background-color: #ffc107; color: #212529; } /* Yellow */
+.btn-warning:hover { background-color: #d39e00; }
+
+.btn-sm { /* Smaller buttons */
+    padding: 5px 10px;
+    font-size: 0.875em;
+}
+
+/* Alerts / Flashed Messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.alert-info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+.alert-warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+
+/* Tables */
+.table-wrapper { /* For responsive tables */
+    overflow-x: auto;
+    margin-bottom: 1em; /* Space below table */
+}
+table { /* General table styling */
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem; /* Consistent spacing */
+}
+table th, table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6; /* Lighter border */
+    text-align: left; /* Default text alignment */
+}
+table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6; /* Heavier border for header bottom */
+    background-color: #e9ecef; /* Light grey background for headers */
+}
+
+/* Errors for forms (WTForms) */
+.errors {
+    list-style-type: none;
+    padding: 0;
+    margin: 5px 0 0 0;
+    color: #dc3545; /* Red for errors */
+    font-size: 0.9em;
+}
+
+/* Utility classes */
+.mb-3 { margin-bottom: 1rem !important; } /* Bootstrap-like margin bottom */
+.mt-2 { margin-top: 0.5rem !important; }
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+        padding: 15px;
+    }
+    h1 { font-size: 1.8em; }
+    h2 { font-size: 1.5em; }
+
+    nav {
+        flex-direction: column; /* Stack nav items */
+        align-items: flex-start;
+    }
+    nav .brand {
+        margin-bottom: 10px; /* Space below brand when stacked */
+    }
+    nav a, nav span {
+        margin-right: 0;
+        margin-bottom: 5px; /* Space between stacked nav items */
+        display: block; /* Make links take full width for easier tapping */
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="datetime-local"],
+    input[type="number"],
+    textarea,
+    select {
+        font-size: 16px; /* Prevent iOS zoom on focus */
+    }
+}
+
+@media (max-width: 480px) {
+    .btn, input[type="submit"], button[type="submit"] {
+        width: 100%; /* Make buttons full width on very small screens */
+        margin-bottom: 10px;
+    }
+    .btn-sm {
+        width: auto; /* Revert for small buttons if needed, or style specifically */
+    }
+    .filters-search form > * { /* Stack filter elements */
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .filters-search form > button, .filters-search form > a.btn {
+        width: auto; /* Allow buttons to be auto width in filters */
+    }
+}
+
+/* Specific styles for calendar_view.html cells */
+.calendar-table td {
+    min-width: 80px; /* Ensure cells have some minimum width */
+    height: 100px; 
+}
+.calendar-table .event-list {
+    font-size: 0.8em;
+}
+.calendar-table .event-list li {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Specific styles for task_list.html priority colors */
+.priority-High { background-color: #ffebee; } /* Lighter red */
+.priority-Medium { background-color: #fff9c4; } /* Lighter yellow */
+.priority-Low { background-color: #e8f5e9; } /* Lighter green */
+.completed-task td {
+    text-decoration: line-through;
+    color: #757575; /* Grey out completed tasks */
+}
+.completed-task.priority-High { background-color: #ef9a9a; }
+.completed-task.priority-Medium { background-color: #fff59d; }
+.completed-task.priority-Low { background-color: #a5d6a7; }
+
+
+/* Ensure form control file input is styled reasonably */
+.form-control-file {
+    display: block;
+    width: 100%;
+}
+
+/* Ensure specific item tables (like in diagram_list.html) are wrapped for responsiveness */
+.item-table { /* This class is used in diagram_list.html and snippet_list.html */
+    display: block; /* Allows overflow-x to work */
+    overflow-x: auto;
+    white-space: nowrap; /* Prevents table content from wrapping, forcing scroll */
+}
+
+/* Adjust .item-table for better wrapping on small screens if desired, or keep scroll */
+@media (max-width: 768px) {
+    .item-table {
+        white-space: normal; /* Allow content to wrap inside cells on smaller screens */
+    }
+}
+
+/* Styles for note_list.html cards */
+.note-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* Styles for statistics.html cards */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjust minmax for better fit */
+    gap: 20px;
+    margin-bottom: 30px;
+}
+.stat-card {
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0; /* Softer border */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Softer shadow */
+}
+
+.chart-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+/* Ensure charts are responsive but don't get too small */
+.chart-container canvas {
+    max-width: 100%;
+    min-height: 250px; /* Minimum height for readability */
 }

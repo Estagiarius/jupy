@@ -63,6 +63,7 @@
 <a href="{{ url_for('todo.add_task') }}" class="btn btn-primary">Add New Task</a>
 
 {% if tasks %}
+<div class="table-wrapper"> <!-- Added table-wrapper -->
 <table class="task-table">
     <thead>
         <tr>
@@ -97,6 +98,7 @@
         {% endfor %}
     </tbody>
 </table>
+</div> <!-- Close table-wrapper -->
 {% else %}
 <p>No tasks found. Why not <a href="{{ url_for('todo.add_task') }}">add one</a>?</p>
 {% endif %}

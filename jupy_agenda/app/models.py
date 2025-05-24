@@ -22,6 +22,9 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f'<User {self.username}>'
 
+    # Indexes are automatically created for primary_key=True and unique=True fields.
+    # No explicit indexes needed here if username and email are unique and id is PK.
+
 from datetime import datetime
 
 class Event(db.Model):
@@ -44,6 +47,10 @@ class Event(db.Model):
         return f'<Event {self.title} (User: {self.user_id})>'
 
     # You might add methods here, e.g., to check duration, or if an event is ongoing.
+
+    __table_args__ = (
+        db.Index('ix_event_user_start_time', 'user_id', 'start_time'),
+    )
 
 # Make sure datetime is imported if not already at the top
 # from datetime import datetime # Already imported for Event model
@@ -73,6 +80,12 @@ class Task(db.Model):
         priorities = {1: 'Low', 2: 'Medium', 3: 'High'}
         return priorities.get(self.priority, 'Unknown')
 
+    __table_args__ = (
+        db.Index('ix_task_user_due_date', 'user_id', 'due_date'),
+        db.Index('ix_task_user_priority', 'user_id', 'priority'),
+        db.Index('ix_task_user_status', 'user_id', 'status'),
+    )
+
 # Ensure datetime is available (already imported for Event and Task)
 # from datetime import datetime
 
@@ -96,6 +109,10 @@ class Location(db.Model):
     def __repr__(self):
         return f'<Location {self.id}: {self.name} (User: {self.user_id})>'
 
+    __table_args__ = (
+        db.Index('ix_location_user_name', 'user_id', 'name'),
+    )
+
 # Ensure datetime is available (already imported)
 # from datetime import datetime
 
@@ -115,6 +132,9 @@ class DiagramNote(db.Model):
 
     def __repr__(self):
         return f'<DiagramNote {self.id}: {self.title} (User: {self.user_id})>'
+    
+    # No specific composite indexes defined here beyond what user_id (FK) and PK provide.
+    # If specific queries become slow, consider adding indexes like ('user_id', 'updated_at').
 
 # Ensure datetime is available (already imported)
 # from datetime import datetime
@@ -137,6 +157,9 @@ class CodeSnippet(db.Model):
     def __repr__(self):
         return f'<CodeSnippet {self.id}: {self.title} (User: {self.user_id}, Lang: {self.language_hint})>'
 
+    # No specific composite indexes defined here beyond what user_id (FK) and PK provide.
+    # If specific queries become slow, consider adding indexes like ('user_id', 'language_hint', 'updated_at').
+
 # Ensure datetime is available (already imported)
 # from datetime import datetime
 
@@ -157,7 +180,11 @@ class Reminder(db.Model):
     # Relationship to User
     user = db.relationship('User', backref=db.backref('reminders', lazy='dynamic'))
 
-    __table_args__ = (db.Index('ix_reminder_time_sent_status', 'reminder_time', 'sent_status'),)
+    # Combined with existing ix_reminder_time_sent_status
+    __table_args__ = (
+        db.Index('ix_reminder_time_sent_status', 'reminder_time', 'sent_status'),
+        db.Index('ix_reminder_user_item', 'user_id', 'item_type', 'item_id'), # For finding specific reminders
+    )
 
     def __repr__(self):
         return f'<Reminder {self.id} for {self.item_type} {self.item_id} at {self.reminder_time} (Status: {self.sent_status})>'
@@ -185,3 +212,35 @@ class LearningMaterial(db.Model):
 
     def __repr__(self):
         return f'<LearningMaterial {self.id}: {self.title} (User: {self.user_id})>'
+
+    __table_args__ = (
+        db.Index('ix_learningmaterial_user_subject', 'user_id', 'subject_category'),
+        db.Index('ix_learningmaterial_user_upload_date', 'user_id', 'upload_date'), # Added based on list_materials sort
+    )
+
+# Ensure datetime is available (already imported)
+# from datetime import datetime
+
+class QuickNote(db.Model):
+    """Model for quick notes."""
+    __tablename__ = 'quick_notes'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False, index=True)
+    content = db.Column(db.Text, nullable=False)
+    category = db.Column(db.String(100), nullable=True, index=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    # Relationship to User
+    user = db.relationship('User', backref=db.backref('quick_notes', lazy='dynamic'))
+
+    def __repr__(self):
+        return f'<QuickNote {self.id}: {self.content[:50]}... (User: {self.user_id})>'
+
+    # category is already indexed by db.Column(..., index=True)
+    # Adding a composite index for user-specific category searches/filters
+    __table_args__ = (
+        db.Index('ix_quicknote_user_category', 'user_id', 'category'),
+        db.Index('ix_quicknote_user_updated_at', 'user_id', 'updated_at'), # For default sort in list_notes
+    )

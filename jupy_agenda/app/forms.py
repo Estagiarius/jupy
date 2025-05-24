@@ -153,3 +153,11 @@ class EditLearningMaterialForm(FlaskForm):
                                      'Allowed file types: pdf, doc(x), txt, jpg, png, ppt(x), xls(x), md')
                      ])
     submit = SubmitField('Update Material')
+
+class QuickNoteForm(FlaskForm):
+    """Form for creating or editing a quick note."""
+    content = TextAreaField('Note Content', 
+                            validators=[DataRequired(), Length(min=1, max=5000)])
+    category = StringField('Category (Optional)', 
+                           validators=[Optional(), Length(max=100)])
+    submit = SubmitField('Save Note')
