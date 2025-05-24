@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
 
 {% block content %}
 <style>
@@ -27,29 +27,29 @@
     }
 </style>
 
-<h2>{{ snippet.title }}</h2>
+<h2>{{ snippet.title }}</h2> <!-- Title of the snippet -->
 
 <div class="snippet-details">
-    <p><strong>Title:</strong> {{ snippet.title }}</p>
+    <p><strong>Título:</strong> {{ snippet.title }}</p>
     
     {% if snippet.language_hint %}
-    <p><strong>Language Hint:</strong> {{ snippet.language_hint }}</p>
+    <p><strong>Linguagem (Dica):</strong> {{ snippet.language_hint }}</p>
     {% endif %}
     
-    <p><strong>Content:</strong></p>
+    <p><strong>Conteúdo:</strong></p>
     <div class="code-display-box">
         <pre><code>{{ snippet.content | e }}</code></pre> {# Ensure content is escaped #}
     </div>
 
-    <p><strong>Created:</strong> {{ snippet.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <p><strong>Criado em:</strong> {{ snippet.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
     {% if snippet.updated_at and snippet.updated_at != snippet.created_at %}
-    <p><strong>Last Updated:</strong> {{ snippet.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    <p><strong>Última Atualização:</strong> {{ snippet.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
     {% endif %}
 </div>
 
 <div style="margin-top: 20px;">
-    <a href="{{ url_for('code_snippet.edit_code_snippet', snippet_id=snippet.id) }}" class="btn btn-info">Edit Snippet</a>
-    <a href="{{ url_for('code_snippet.list_code_snippets') }}" class="btn btn-secondary">Back to Snippets List</a>
+    <a href="{{ url_for('code_snippet.edit_code_snippet', snippet_id=snippet.id) }}" class="btn btn-info">Editar Fragmento</a>
+    <a href="{{ url_for('code_snippet.list_code_snippets') }}" class="btn btn-secondary">Voltar para a Lista de Fragmentos</a>
 </div>
 
 {% endblock %}

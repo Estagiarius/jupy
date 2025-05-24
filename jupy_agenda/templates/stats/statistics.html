@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
 
 {% block content %}
 <style>
@@ -37,36 +37,36 @@
     }
 </style>
 
-<h2>{{ title }}</h2>
+<h2>{{ title }}</h2> <!-- Dynamic title -->
 
 <div class="stats-container">
     <div class="stat-card">
-        <h3>Task Statistics</h3>
-        <p>Total Tasks: <strong>{{ task_stats.total }}</strong></p>
-        <p>Completed: <strong style="color: green;">{{ task_stats.completed }}</strong></p>
-        <p>Pending: <strong style="color: orange;">{{ task_stats.pending }}</strong></p>
-        <p>Overdue Pending: <strong style="color: red;">{{ task_stats.overdue_pending }}</strong></p>
+        <h3>Estatísticas de Tarefas</h3>
+        <p>Total de Tarefas: <strong>{{ task_stats.total }}</strong></p>
+        <p>Concluídas: <strong style="color: green;">{{ task_stats.completed }}</strong></p>
+        <p>Pendentes: <strong style="color: orange;">{{ task_stats.pending }}</strong></p>
+        <p>Pendentes Atrasadas: <strong style="color: red;">{{ task_stats.overdue_pending }}</strong></p>
     </div>
 
     <div class="stat-card">
-        <h3>Event Statistics</h3>
-        <p>Total Events: <strong>{{ event_stats.total }}</strong></p>
-        <p>Past Events: <strong style="color: grey;">{{ event_stats.past }}</strong></p>
-        <p>Upcoming Events: <strong style="color: blue;">{{ event_stats.upcoming }}</strong></p>
+        <h3>Estatísticas de Eventos</h3>
+        <p>Total de Eventos: <strong>{{ event_stats.total }}</strong></p>
+        <p>Eventos Passados: <strong style="color: grey;">{{ event_stats.past }}</strong></p>
+        <p>Próximos Eventos: <strong style="color: blue;">{{ event_stats.upcoming }}</strong></p>
     </div>
 </div>
 
 <div class="stats-container">
     {% if task_completion_chart_data.data[0] > 0 or task_completion_chart_data.data[1] > 0 %}
     <div class="chart-container">
-        <h4>Task Completion Status</h4>
+        <h4>Status de Conclusão de Tarefas</h4>
         <canvas id="taskCompletionChart"></canvas>
     </div>
     {% endif %}
 
     {% if event_distribution_chart_data.data[0] > 0 or event_distribution_chart_data.data[1] > 0 %}
     <div class="chart-container">
-        <h4>Event Distribution</h4>
+        <h4>Distribuição de Eventos</h4>
         <canvas id="eventDistributionChart"></canvas>
     </div>
     {% endif %}
@@ -74,14 +74,14 @@
 
 {% if monthly_tasks_chart_data.data | sum > 0 %}
 <div class="chart-container">
-    <h4>Monthly Tasks Created (Last 6 Months)</h4>
+    <h4>Tarefas Criadas por Mês (Últimos 6 Meses)</h4>
     <canvas id="monthlyTasksChart"></canvas>
 </div>
 {% endif %}
 
 {% if monthly_events_chart_data.data | sum > 0 %}
 <div class="chart-container">
-    <h4>Monthly Events Created (Last 6 Months)</h4>
+    <h4>Eventos Criados por Mês (Últimos 6 Meses)</h4>
     <canvas id="monthlyEventsChart"></canvas>
 </div>
 {% endif %}
@@ -95,9 +95,9 @@ document.addEventListener('DOMContentLoaded', function () {
         new Chart(taskCtx, {
             type: 'pie',
             data: {
-                labels: {{ task_completion_chart_data.labels | tojson }},
+                labels: ['Concluídas', 'Pendentes'], // Translated labels
                 datasets: [{
-                    label: 'Task Status',
+                    label: 'Status da Tarefa', // Translated label
                     data: {{ task_completion_chart_data.data | tojson }},
                     backgroundColor: [
                         'rgba(75, 192, 192, 0.7)', // Completed - Greenish
@@ -123,9 +123,9 @@ document.addEventListener('DOMContentLoaded', function () {
         new Chart(eventCtx, {
             type: 'pie',
             data: {
-                labels: {{ event_distribution_chart_data.labels | tojson }},
+                labels: ['Passados', 'Próximos'], // Translated labels
                 datasets: [{
-                    label: 'Event Distribution',
+                    label: 'Distribuição de Eventos', // Translated label
                     data: {{ event_distribution_chart_data.data | tojson }},
                     backgroundColor: [
                         'rgba(153, 102, 255, 0.7)', // Past - Purple
@@ -151,9 +151,9 @@ document.addEventListener('DOMContentLoaded', function () {
         new Chart(monthlyTasksCtx, {
             type: 'bar',
             data: {
-                labels: {{ monthly_tasks_chart_data.labels | tojson }},
+                labels: {{ monthly_tasks_chart_data.labels | tojson }}, // Keep YYYY-MM format
                 datasets: [{
-                    label: 'Tasks Created per Month',
+                    label: 'Tarefas Criadas por Mês', // Translated label
                     data: {{ monthly_tasks_chart_data.data | tojson }},
                     backgroundColor: 'rgba(255, 99, 132, 0.5)', // Reddish
                     borderColor: 'rgba(255, 99, 132, 1)',
@@ -181,9 +181,9 @@ document.addEventListener('DOMContentLoaded', function () {
         new Chart(monthlyEventsCtx, {
             type: 'bar',
             data: {
-                labels: {{ monthly_events_chart_data.labels | tojson }},
+                labels: {{ monthly_events_chart_data.labels | tojson }}, // Keep YYYY-MM format
                 datasets: [{
-                    label: 'Events Created per Month',
+                    label: 'Eventos Criados por Mês', // Translated label
                     data: {{ monthly_events_chart_data.data | tojson }},
                     backgroundColor: 'rgba(75, 192, 192, 0.5)', // Greenish
                     borderColor: 'rgba(75, 192, 192, 1)',

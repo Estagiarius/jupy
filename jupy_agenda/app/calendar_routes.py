@@ -19,10 +19,10 @@ def month_view(year=None, month=None):
     
     # Validate year and month (basic validation)
     if not (1 <= month <= 12):
-        flash('Invalid month specified. Redirecting to current month.', 'warning')
+        flash('Mês inválido especificado. Redirecionando para o mês atual.', 'warning')
         return redirect(url_for('calendar.month_view', year=today.year, month=today.month))
     if not (1900 <= year <= 2100): # Arbitrary range, adjust as needed
-        flash('Invalid year specified. Redirecting to current month.', 'warning')
+        flash('Ano inválido especificado. Redirecionando para o mês atual.', 'warning')
         return redirect(url_for('calendar.month_view', year=today.year, month=today.month))
 
     # Create a calendar object
@@ -139,10 +139,10 @@ def delete_event(event_id):
         year, month = event.start_time.year, event.start_time.month
         db.session.delete(event)
         db.session.commit()
-        flash('Event deleted successfully!', 'success')
+        flash('Evento excluído com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting event: {e}', 'danger')
+        flash(f'Erro ao excluir evento: {e}', 'danger')
     
     return redirect(url_for('calendar.month_view', year=year, month=month))
 
@@ -201,11 +201,11 @@ def add_event():
             db.session.flush() # Flush to get new_event.id for reminder
             _update_event_reminder(new_event) # Add reminder logic
             db.session.commit()
-            flash('Event created successfully!', 'success')
+            flash('Evento criado com sucesso!', 'success')
             return redirect(url_for('calendar.month_view', year=form.start_time.data.year, month=form.start_time.data.month))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error creating event: {e}', 'danger')
+            flash(f'Erro ao criar evento: {e}', 'danger')
     return render_template('calendar/event_form.html', title='Add Event', form=form, legend='New Event')
 
 
@@ -226,10 +226,10 @@ def edit_event(event_id):
             event.end_time = form.end_time.data
             _update_event_reminder(event) # Add/Update reminder logic
             db.session.commit()
-            flash('Event updated successfully!', 'success')
+            flash('Evento atualizado com sucesso!', 'success')
             return redirect(url_for('calendar.month_view', year=event.start_time.year, month=event.start_time.month))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error updating event: {e}', 'danger')
+            flash(f'Erro ao atualizar evento: {e}', 'danger')
             
     return render_template('calendar/event_form.html', title='Edit Event', form=form, legend=f'Edit "{event.title}"', event_id=event.id)

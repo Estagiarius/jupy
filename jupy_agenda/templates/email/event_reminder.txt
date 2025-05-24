@@ -1,15 +1,15 @@
-Hi {{ user.username }},
+Olá {{ user.username }},
 
-This is a reminder for your upcoming event:
+Este é um lembrete para o seu próximo evento:
 
-Title: {{ item.title }}
-Starts: {{ item.start_time.strftime('%Y-%m-%d %H:%M:%S') }} UTC
+Título: {{ item.title }}
+Início: {{ item.start_time.strftime('%Y-%m-%d %H:%M:%S') }} UTC
 {% if item.description %}
-Description:
+Descrição:
 {{ item.description }}
 {% endif %}
 
-You can view your calendar here: {{ url_for('calendar.month_view', _external=True) }}
+Você pode visualizar seu calendário aqui: {{ url_for('calendar.month_view', _external=True) }}
 
-Thanks,
-Jupy Agenda Team
+Atenciosamente,
+Equipe Jupy Agenda

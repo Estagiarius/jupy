@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
 
 {% block content %}
 <style>
@@ -34,44 +34,44 @@
         text-decoration: line-through;
         color: #888;
     }
-    .priority-High { background-color: #ffdddd; } /* Light red */
-    .priority-Medium { background-color: #ffffcc; } /* Light yellow */
-    .priority-Low { background-color: #ddffdd; } /* Light green */
+    .priority-High { background-color: #ffebee; } /* Lighter red for High priority */
+    .priority-Medium { background-color: #fff9c4; } /* Lighter yellow for Medium */
+    .priority-Low { background-color: #e8f5e9; } /* Lighter green for Low */
 </style>
 
-<h2>{{ title }}</h2>
+<h2>{{ title }}</h2> <!-- Dynamic title -->
 
 <div class="filters">
     <form method="GET" action="{{ url_for('todo.list_tasks') }}">
-        <label for="status_filter">Filter by Status:</label>
+        <label for="status_filter">Filtrar por Status:</label>
         <select name="status" id="status_filter" onchange="this.form.submit()">
-            <option value="" {% if not current_status_filter %}selected{% endif %}>All</option>
-            <option value="pending" {% if current_status_filter == 'pending' %}selected{% endif %}>Pending</option>
-            <option value="completed" {% if current_status_filter == 'completed' %}selected{% endif %}>Completed</option>
+            <option value="" {% if not current_status_filter %}selected{% endif %}>Todos</option>
+            <option value="pending" {% if current_status_filter == 'pending' %}selected{% endif %}>Pendente</option>
+            <option value="completed" {% if current_status_filter == 'completed' %}selected{% endif %}>Concluído</option>
         </select>
 
-        <label for="sort_by">Sort by:</label>
+        <label for="sort_by">Ordenar por:</label>
         <select name="sort_by" id="sort_by" onchange="this.form.submit()">
-            <option value="priority" {% if current_sort_by == 'priority' %}selected{% endif %}>Priority</option>
-            <option value="due_date" {% if current_sort_by == 'due_date' %}selected{% endif %}>Due Date</option>
-            <option value="created_at" {% if current_sort_by == 'created_at' %}selected{% endif %}>Creation Date</option>
+            <option value="priority" {% if current_sort_by == 'priority' %}selected{% endif %}>Prioridade</option>
+            <option value="due_date" {% if current_sort_by == 'due_date' %}selected{% endif %}>Data de Vencimento</option>
+            <option value="created_at" {% if current_sort_by == 'created_at' %}selected{% endif %}>Data de Criação</option>
         </select>
         <!-- Hidden submit button, form submitted by onchange -->
     </form>
 </div>
 
-<a href="{{ url_for('todo.add_task') }}" class="btn btn-primary">Add New Task</a>
+<a href="{{ url_for('todo.add_task') }}" class="btn btn-primary">Adicionar Nova Tarefa</a>
 
 {% if tasks %}
 <div class="table-wrapper"> <!-- Added table-wrapper -->
 <table class="task-table">
     <thead>
         <tr>
-            <th>Description</th>
-            <th>Due Date</th>
-            <th>Priority</th>
+            <th>Descrição</th>
+            <th>Data de Vencimento</th>
+            <th>Prioridade</th>
             <th>Status</th>
-            <th>Actions</th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -80,18 +80,18 @@
             <td>{{ task.description }}</td>
             <td>{{ task.due_date.strftime('%Y-%m-%d') if task.due_date else 'N/A' }}</td>
             <td>{{ task.priority_display }}</td>
-            <td>{{ task.status.capitalize() }}</td>
+            <td>{{ task.status.capitalize() }}</td> {# Assuming status is 'pending' or 'completed' #}
             <td class="task-actions">
-                <a href="{{ url_for('todo.edit_task', task_id=task.id) }}" class="btn btn-sm btn-info">Edit</a>
+                <a href="{{ url_for('todo.edit_task', task_id=task.id) }}" class="btn btn-sm btn-info">Editar</a>
                 
                 <form method="POST" action="{{ url_for('todo.update_task_status', task_id=task.id) }}" style="display: inline;">
                     <button type="submit" class="btn btn-sm {{ 'btn-warning' if task.status == 'completed' else 'btn-success' }}">
-                        {{ 'Mark Pending' if task.status == 'completed' else 'Mark Complete' }}
+                        {{ 'Marcar Pendente' if task.status == 'completed' else 'Marcar Concluída' }}
                     </button>
                 </form>
 
-                <form method="POST" action="{{ url_for('todo.delete_task', task_id=task.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this task?');">
-                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                <form method="POST" action="{{ url_for('todo.delete_task', task_id=task.id) }}" style="display: inline;" onsubmit="return confirm('Você tem certeza que deseja excluir esta tarefa?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
                 </form>
             </td>
         </tr>
@@ -100,7 +100,7 @@
 </table>
 </div> <!-- Close table-wrapper -->
 {% else %}
-<p>No tasks found. Why not <a href="{{ url_for('todo.add_task') }}">add one</a>?</p>
+<p>Nenhuma tarefa encontrada. Que tal <a href="{{ url_for('todo.add_task') }}">adicionar uma</a>?</p>
 {% endif %}
 
 {% endblock %}

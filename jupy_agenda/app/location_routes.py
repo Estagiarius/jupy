@@ -37,11 +37,11 @@ def add_location():
             )
             db.session.add(new_location)
             db.session.commit()
-            flash('Location created successfully!', 'success')
+            flash('Local criado com sucesso!', 'success')
             return redirect(url_for('location.list_locations'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error creating location: {e}', 'danger')
+            flash(f'Erro ao criar local: {e}', 'danger')
             # app.logger.error(f"Error creating location: {e}") # For server-side logging
     return render_template('locations/location_form.html', title='Add Location', form=form, legend='New Location')
 
@@ -63,11 +63,11 @@ def edit_location(location_id):
             location.longitude = form.longitude.data
             location.updated_at = datetime.utcnow() # Manually update if not using onupdate in model for all changes
             db.session.commit()
-            flash('Location updated successfully!', 'success')
+            flash('Local atualizado com sucesso!', 'success')
             return redirect(url_for('location.list_locations'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error updating location: {e}', 'danger')
+            flash(f'Erro ao atualizar local: {e}', 'danger')
     return render_template('locations/location_form.html', title='Edit Location', form=form, legend=f'Edit "{location.name}"', location_id=location.id)
 
 @location_bp.route('/delete/<int:location_id>', methods=['POST']) # POST only for deletion
@@ -81,10 +81,10 @@ def delete_location(location_id):
     try:
         db.session.delete(location)
         db.session.commit()
-        flash('Location deleted successfully!', 'success')
+        flash('Local excluído com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting location: {e}', 'danger')
+        flash(f'Erro ao excluir local: {e}', 'danger')
     
     return redirect(url_for('location.list_locations'))
 

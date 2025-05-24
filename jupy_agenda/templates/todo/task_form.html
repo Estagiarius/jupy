@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
 
 {% block content %}
-    <h2>{{ legend }}</h2>
+    <h2>{{ legend }}</h2> <!-- Dynamic legend -->
     <form method="POST" action=""> {# Action URL will be set by the route #}
         {{ form.hidden_tag() }} {# CSRF token #}
         
         <p>
-            {{ form.description.label }}<br>
+            {{ form.description.label(text='Descrição') }}<br>
             {{ form.description(rows=5, cols=60, class="form-control") }}<br>
             {% if form.description.errors %}
                 <ul class="errors">
@@ -17,7 +17,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.due_date.label }} (e.g., 2024-07-28)<br>
+            {{ form.due_date.label(text='Data de Vencimento (AAAA-MM-DD)') }}<br>
             {{ form.due_date(class="form-control") }}<br>
             {% if form.due_date.errors %}
                 <ul class="errors">
@@ -26,7 +26,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.priority.label }}<br>
+            {{ form.priority.label(text='Prioridade') }}<br>
             {{ form.priority(class="form-control") }}<br>
             {% if form.priority.errors %}
                 <ul class="errors">
@@ -35,7 +35,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.status.label }}<br>
+            {{ form.status.label(text='Status') }}<br>
             {{ form.status(class="form-control") }}<br>
             {% if form.status.errors %}
                 <ul class="errors">
@@ -43,8 +43,8 @@
                 </ul>
             {% endif %}
         </p>
-        <p>{{ form.submit(class="btn btn-primary") }}</p>
+        <p>{{ form.submit(value='Salvar Tarefa', class="btn btn-primary") }}</p>
     </form>
 
-    <a href="{{ url_for('todo.list_tasks') }}">Back to To-Do List</a>
+    <a href="{{ url_for('todo.list_tasks') }}">Voltar para a Lista de Tarefas</a>
 {% endblock %}

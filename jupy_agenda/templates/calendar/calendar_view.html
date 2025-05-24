@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %} <!-- Title is dynamic, set in routes -->
 
 {% block content %}
 <style>
@@ -26,7 +26,7 @@
         background-color: #f9f9f9;
     }
     .today {
-        background-color: #e6ffe6;
+        background-color: #e6ffe6; /* Today's date highlight */
     }
     .event-list {
         list-style: none;
@@ -59,24 +59,24 @@
 </style>
 
 <div class="calendar-nav">
-    <a href="{{ url_for('calendar.month_view', year=prev_year, month=prev_month) }}" class="btn btn-secondary">&laquo; Previous Month</a>
-    <h2>{{ month_name }} {{ year }}</h2>
-    <a href="{{ url_for('calendar.month_view', year=next_year, month=next_month) }}" class="btn btn-secondary">Next Month &raquo;</a>
+    <a href="{{ url_for('calendar.month_view', year=prev_year, month=prev_month) }}" class="btn btn-secondary">&laquo; Mês Anterior</a>
+    <h2>{{ month_name }} {{ year }}</h2> <!-- month_name is already localized by Python's calendar module if locale is set -->
+    <a href="{{ url_for('calendar.month_view', year=next_year, month=next_month) }}" class="btn btn-secondary">Próximo Mês &raquo;</a>
 </div>
 
-<a href="{{ url_for('calendar.add_event') }}" class="btn btn-primary mb-3">Add New Event</a>
+<a href="{{ url_for('calendar.add_event') }}" class="btn btn-primary mb-3">Adicionar Novo Evento</a>
 
 <div class="table-wrapper"> <!-- Added table-wrapper -->
 <table class="calendar-table">
     <thead>
         <tr>
-            <th>Mon</th>
-            <th>Tue</th>
-            <th>Wed</th>
-            <th>Thu</th>
-            <th>Fri</th>
-            <th>Sat</th>
-            <th>Sun</th>
+            <th>Seg</th> <!-- Segunda-feira -->
+            <th>Ter</th> <!-- Terça-feira -->
+            <th>Qua</th> <!-- Quarta-feira -->
+            <th>Qui</th> <!-- Quinta-feira -->
+            <th>Sex</th> <!-- Sexta-feira -->
+            <th>Sáb</th> <!-- Sábado -->
+            <th>Dom</th> <!-- Domingo -->
         </tr>
     </thead>
     <tbody>

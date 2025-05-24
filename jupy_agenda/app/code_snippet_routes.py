@@ -35,11 +35,11 @@ def add_code_snippet():
             )
             db.session.add(new_snippet)
             db.session.commit()
-            flash('Code snippet created successfully!', 'success')
+            flash('Fragmento de código criado com sucesso!', 'success')
             return redirect(url_for('code_snippet.list_code_snippets'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error creating code snippet: {e}', 'danger')
+            flash(f'Erro ao criar fragmento de código: {e}', 'danger')
     return render_template('code_snippets/snippet_form.html', title='Add Code Snippet', form=form, legend='New Code Snippet')
 
 @code_snippet_bp.route('/edit/<int:snippet_id>', methods=['GET', 'POST'])
@@ -58,11 +58,11 @@ def edit_code_snippet(snippet_id):
             snippet.language_hint = form.language_hint.data
             snippet.updated_at = datetime.utcnow()
             db.session.commit()
-            flash('Code snippet updated successfully!', 'success')
+            flash('Fragmento de código atualizado com sucesso!', 'success')
             return redirect(url_for('code_snippet.list_code_snippets'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error updating code snippet: {e}', 'danger')
+            flash(f'Erro ao atualizar fragmento de código: {e}', 'danger')
     return render_template('code_snippets/snippet_form.html', title='Edit Code Snippet', form=form, legend=f'Edit "{snippet.title}"', snippet_id=snippet.id)
 
 @code_snippet_bp.route('/delete/<int:snippet_id>', methods=['POST']) # POST only for deletion
@@ -76,10 +76,10 @@ def delete_code_snippet(snippet_id):
     try:
         db.session.delete(snippet)
         db.session.commit()
-        flash('Code snippet deleted successfully!', 'success')
+        flash('Fragmento de código excluído com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting code snippet: {e}', 'danger')
+        flash(f'Erro ao excluir fragmento de código: {e}', 'danger')
     
     return redirect(url_for('code_snippet.list_code_snippets'))
 

@@ -56,11 +56,11 @@ def add_task():
             )
             db.session.add(new_task)
             db.session.commit()
-            flash('Task created successfully!', 'success')
+            flash('Tarefa criada com sucesso!', 'success')
             return redirect(url_for('todo.list_tasks'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error creating task: {e}', 'danger')
+            flash(f'Erro ao criar tarefa: {e}', 'danger')
             # app.logger.error(f"Error creating task: {e}") # For server-side logging
     return render_template('todo/task_form.html', title='Add Task', form=form, legend='New Task')
 
@@ -81,11 +81,11 @@ def edit_task(task_id):
             task.status = form.status.data
             # updated_at is handled by the model's onupdate
             db.session.commit()
-            flash('Task updated successfully!', 'success')
+            flash('Tarefa atualizada com sucesso!', 'success')
             return redirect(url_for('todo.list_tasks'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error updating task: {e}', 'danger')
+            flash(f'Erro ao atualizar tarefa: {e}', 'danger')
     return render_template('todo/task_form.html', title='Edit Task', form=form, legend=f'Edit Task "{task.description[:30]}..."', task_id=task.id)
 
 @todo_bp.route('/task/delete/<int:task_id>', methods=['POST']) # POST only for deletion
@@ -99,10 +99,10 @@ def delete_task(task_id):
     try:
         db.session.delete(task)
         db.session.commit()
-        flash('Task deleted successfully!', 'success')
+        flash('Tarefa excluída com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting task: {e}', 'danger')
+        flash(f'Erro ao excluir tarefa: {e}', 'danger')
     
     return redirect(url_for('todo.list_tasks'))
 
@@ -117,19 +117,19 @@ def update_task_status(task_id):
     try:
         if task.status == 'pending':
             task.status = 'completed'
-            flash(f'Task "{task.description[:30]}..." marked as completed!', 'success')
+            flash(f'Tarefa "{task.description[:30]}..." marcada como concluída!', 'success')
         elif task.status == 'completed':
             task.status = 'pending'
-            flash(f'Task "{task.description[:30]}..." marked as pending!', 'info')
+            flash(f'Tarefa "{task.description[:30]}..." marcada como pendente!', 'info')
         else:
             # Handle other statuses if any, or default to pending
             task.status = 'pending'
-            flash(f'Task "{task.description[:30]}..." status reset to pending.', 'info')
+            flash(f'Status da tarefa "{task.description[:30]}..." redefinido para pendente.', 'info')
             
         db.session.commit()
     except Exception as e:
         db.session.rollback()
-        flash(f'Error updating task status: {e}', 'danger')
+        flash(f'Erro ao atualizar status da tarefa: {e}', 'danger')
         
     return redirect(request.referrer or url_for('todo.list_tasks')) # Redirect to previous page or list
 
@@ -191,11 +191,11 @@ def add_task():
             db.session.flush() # Flush to get new_task.id
             _update_task_reminder(new_task) # Add reminder logic
             db.session.commit()
-            flash('Task created successfully!', 'success')
+            flash('Tarefa criada com sucesso!', 'success')
             return redirect(url_for('todo.list_tasks'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error creating task: {e}', 'danger')
+            flash(f'Erro ao criar tarefa: {e}', 'danger')
     return render_template('todo/task_form.html', title='Add Task', form=form, legend='New Task')
 
 @todo_bp.route('/task/edit/<int:task_id>', methods=['GET', 'POST'])
@@ -215,9 +215,9 @@ def edit_task(task_id):
             task.status = form.status.data
             _update_task_reminder(task) # Add/Update reminder logic
             db.session.commit()
-            flash('Task updated successfully!', 'success')
+            flash('Tarefa atualizada com sucesso!', 'success')
             return redirect(url_for('todo.list_tasks'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error updating task: {e}', 'danger')
+            flash(f'Erro ao atualizar tarefa: {e}', 'danger')
     return render_template('todo/task_form.html', title='Edit Task', form=form, legend=f'Edit Task "{task.description[:30]}..."', task_id=task.id)

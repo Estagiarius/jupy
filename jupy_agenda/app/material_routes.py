@@ -70,7 +70,7 @@ def upload_material():
             )
             db.session.add(new_material)
             db.session.commit()
-            flash('Learning material uploaded successfully!', 'success')
+            flash('Material de estudo enviado com sucesso!', 'success')
             return redirect(url_for('material.list_materials'))
         except Exception as e:
             db.session.rollback()
@@ -79,8 +79,8 @@ def upload_material():
                 try:
                     os.remove(file_server_path)
                 except OSError as oe:
-                    current_app.logger.error(f"Error deleting orphaned file {file_server_path} after DB error: {oe}")
-            flash(f'Error uploading material: {e}', 'danger')
+                    current_app.logger.error(f"Erro ao excluir arquivo órfão {file_server_path} após erro no BD: {oe}")
+            flash(f'Erro ao enviar material: {e}', 'danger')
             current_app.logger.error(f"Error uploading material: {e}")
             
     return render_template('materials/material_form.html', title='Upload Material', form=form, legend='Upload New Material')
@@ -166,9 +166,9 @@ def edit_material(material_id):
                     try:
                         os.remove(old_file_server_path)
                     except OSError as oe:
-                         current_app.logger.error(f"Error deleting old file {old_file_server_path} during edit: {oe}")
+                         current_app.logger.error(f"Erro ao excluir arquivo antigo {old_file_server_path} durante a edição: {oe}")
             
-            flash('Learning material updated successfully!', 'success')
+            flash('Material de estudo atualizado com sucesso!', 'success')
             return redirect(url_for('material.list_materials'))
         except Exception as e:
             db.session.rollback()
@@ -177,9 +177,9 @@ def edit_material(material_id):
                 try:
                     os.remove(new_file_server_path_temp)
                 except OSError as oe:
-                    current_app.logger.error(f"Error deleting temp new file {new_file_server_path_temp} after DB error during edit: {oe}")
+                    current_app.logger.error(f"Erro ao excluir novo arquivo temporário {new_file_server_path_temp} após erro no BD durante a edição: {oe}")
 
-            flash(f'Error updating material: {e}', 'danger')
+            flash(f'Erro ao atualizar material: {e}', 'danger')
             current_app.logger.error(f"Error updating material: {e}")
             
     return render_template('materials/material_form.html', title='Edit Material', form=form, legend=f'Edit "{material.title}"', material_id=material.id, is_edit=True)
@@ -208,16 +208,16 @@ def delete_material(material_id):
                 if not os.listdir(user_dir): # Check if directory is empty
                     os.rmdir(user_dir)
             except OSError as e:
-                flash(f'Error deleting file from server: {e}. Record deleted from DB.', 'warning')
-                current_app.logger.error(f"Error deleting file {file_server_path}: {e}")
+                    flash(f'Erro ao excluir arquivo do servidor: {e}. Registro excluído do BD.', 'warning')
+                    current_app.logger.error(f"Erro ao excluir arquivo {file_server_path}: {e}")
         else:
-            flash('File not found on server, but record deleted from DB.', 'warning')
-            current_app.logger.warning(f"File not found on server for deleted material: {file_server_path}")
+            flash('Arquivo não encontrado no servidor, mas registro excluído do BD.', 'warning')
+            current_app.logger.warning(f"Arquivo não encontrado no servidor para material excluído: {file_server_path}")
 
-        flash('Learning material deleted successfully!', 'success')
+        flash('Material de estudo excluído com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting material: {e}', 'danger')
+        flash(f'Erro ao excluir material: {e}', 'danger')
         current_app.logger.error(f"Error deleting material from DB: {e}")
         
     return redirect(url_for('material.list_materials'))

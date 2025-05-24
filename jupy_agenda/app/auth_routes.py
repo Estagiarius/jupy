@@ -20,12 +20,12 @@ def register():
             user.set_password(form.password.data)
             db.session.add(user)
             db.session.commit()
-            flash('Congratulations, you are now a registered user!', 'success')
+            flash('Parabéns, você agora é um usuário registrado!', 'success')
             login_user(user) # Log in the user after registration
             return redirect(url_for('main.index')) # Or wherever you want to redirect after registration
         except Exception as e:
             db.session.rollback()
-            flash(f'Error during registration: {e}', 'danger')
+            flash(f'Erro durante o registro: {e}', 'danger')
             # Log the error for debugging
             # current_app.logger.error(f'Registration error: {e}')
     return render_template('register.html', title='Register', form=form)
@@ -41,11 +41,11 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         if user and user.check_password(form.password.data):
             login_user(user, remember=form.remember.data)
-            flash('Login successful!', 'success')
+            flash('Login bem-sucedido!', 'success')
             next_page = request.args.get('next') # For redirecting after login if 'next' is in URL
             return redirect(next_page or url_for('main.index'))
         else:
-            flash('Login Unsuccessful. Please check email and password', 'danger')
+            flash('Login malsucedido. Por favor, verifique seu email e senha', 'danger')
     return render_template('login.html', title='Login', form=form)
 
 @auth_bp.route('/logout')
@@ -53,7 +53,7 @@ def login():
 def logout():
     """Handles user logout."""
     logout_user()
-    flash('You have been logged out.', 'info')
+    flash('Você foi desconectado.', 'info')
     return redirect(url_for('auth.login'))
 
 # It's good practice to have a placeholder for the main index route

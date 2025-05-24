@@ -1,16 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jupy Agenda</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
-    <div class="container">
-        <h1>Welcome to Jupy Agenda</h1>
-        <!-- Content will go here -->
-    </div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Bem-vindo à Jupy Agenda{% endblock %}
+
+{% block content %}
+    <h1>Bem-vindo à Jupy Agenda!</h1>
+    <p>Sua agenda pessoal e organizador de estudos.</p>
+    
+    {% if not current_user.is_authenticated %}
+    <p>Para começar, você pode <a href="{{ url_for('auth.login') }}">entrar</a> ou <a href="{{ url_for('auth.register') }}">registrar uma nova conta</a>.</p>
+    {% else %}
+    <p>Use o menu de navegação acima para acessar as funcionalidades.</p>
+    <p>Aqui estão alguns links rápidos:</p>
+    <ul>
+        <li><a href="{{ url_for('calendar.month_view') }}">Ver Calendário</a></li>
+        <li><a href="{{ url_for('todo.list_tasks') }}">Ver Lista de Tarefas</a></li>
+        <li><a href="{{ url_for('note.list_notes') }}">Ver Notas Rápidas</a></li>
+    </ul>
+    {% endif %}
+    
+    <!-- Additional introductory content can be added here -->
+    
+{% endblock %}

@@ -34,11 +34,11 @@ def add_diagram_note():
             )
             db.session.add(new_note)
             db.session.commit()
-            flash('Diagram note created successfully!', 'success')
+            flash('Nota de diagrama criada com sucesso!', 'success')
             return redirect(url_for('diagram.list_diagram_notes'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error creating diagram note: {e}', 'danger')
+            flash(f'Erro ao criar nota de diagrama: {e}', 'danger')
     return render_template('diagrams/diagram_form.html', title='Add Diagram Note', form=form, legend='New Diagram Note')
 
 @diagram_bp.route('/edit/<int:note_id>', methods=['GET', 'POST'])
@@ -56,11 +56,11 @@ def edit_diagram_note(note_id):
             note.content = form.content.data
             note.updated_at = datetime.utcnow()
             db.session.commit()
-            flash('Diagram note updated successfully!', 'success')
+            flash('Nota de diagrama atualizada com sucesso!', 'success')
             return redirect(url_for('diagram.list_diagram_notes'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error updating diagram note: {e}', 'danger')
+            flash(f'Erro ao atualizar nota de diagrama: {e}', 'danger')
     return render_template('diagrams/diagram_form.html', title='Edit Diagram Note', form=form, legend=f'Edit "{note.title}"', note_id=note.id)
 
 @diagram_bp.route('/delete/<int:note_id>', methods=['POST']) # POST only for deletion
@@ -74,9 +74,9 @@ def delete_diagram_note(note_id):
     try:
         db.session.delete(note)
         db.session.commit()
-        flash('Diagram note deleted successfully!', 'success')
+        flash('Nota de diagrama excluída com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting diagram note: {e}', 'danger')
+        flash(f'Erro ao excluir nota de diagrama: {e}', 'danger')
     
     return redirect(url_for('diagram.list_diagram_notes'))

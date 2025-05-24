@@ -1,14 +1,14 @@
-Hi {{ user.username }},
+Olá {{ user.username }},
 
-This is a reminder for your task:
+Este é um lembrete para sua tarefa:
 
-Description: {{ item.description }}
+Descrição: {{ item.description }}
 {% if item.due_date %}
-Due Date: {{ item.due_date.strftime('%Y-%m-%d') }}
+Data de Vencimento: {{ item.due_date.strftime('%Y-%m-%d') }}
 {% endif %}
-Priority: {{ item.priority_display }}
+Prioridade: {{ item.priority_display }}
 
-You can view your To-Do list here: {{ url_for('todo.list_tasks', _external=True) }}
+Você pode visualizar sua Lista de Tarefas aqui: {{ url_for('todo.list_tasks', _external=True) }}
 
-Thanks,
-Jupy Agenda Team
+Atenciosamente,
+Equipe Jupy Agenda

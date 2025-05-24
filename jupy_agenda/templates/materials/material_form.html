@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
 
 {% block content %}
-    <h2>{{ legend }}</h2>
+    <h2>{{ legend }}</h2> <!-- Dynamic legend -->
     {# Ensure enctype for file uploads #}
     <form method="POST" action="" enctype="multipart/form-data"> 
         {{ form.hidden_tag() }} {# CSRF token #}
         
         <p>
-            {{ form.title.label }}<br>
+            {{ form.title.label(text='Título') }}<br>
             {{ form.title(size=60, class="form-control") }}<br>
             {% if form.title.errors %}
                 <ul class="errors">
@@ -18,7 +18,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.description.label }}<br>
+            {{ form.description.label(text='Descrição') }}<br>
             {{ form.description(rows=5, cols=60, class="form-control") }}<br>
             {% if form.description.errors %}
                 <ul class="errors">
@@ -27,7 +27,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.subject_category.label }}<br>
+            {{ form.subject_category.label(text='Assunto/Categoria') }}<br>
             {{ form.subject_category(size=60, class="form-control") }}<br>
             {% if form.subject_category.errors %}
                 <ul class="errors">
@@ -36,7 +36,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.upload_date.label }} (e.g., 2024-07-28)<br>
+            {{ form.upload_date.label(text='Data de Upload (AAAA-MM-DD)') }}<br>
             {{ form.upload_date(class="form-control") }}<br>
             {% if form.upload_date.errors %}
                 <ul class="errors">
@@ -46,8 +46,8 @@
         </p>
         
         <p>
-            {{ form.file.label }}
-            {% if is_edit %} (Leave empty to keep current file) {% endif %}
+            {{ form.file.label(text='Arquivo') }}
+            {% if is_edit %} (Deixe em branco para manter o arquivo atual) {% endif %}
             <br>
             {{ form.file(class="form-control-file") }}<br>
             {% if form.file.errors %}
@@ -57,15 +57,12 @@
             {% endif %}
         </p>
 
-        {% if is_edit and material_id %}
-            {% set material = get_material_by_id(material_id) %} {# Hypothetical function to get material for current file info #}
-            {% if material and material.file_name %}
-            <p><em>Current file: {{ material.file_name }}</em></p>
-            {% endif %}
+        {% if is_edit and material and material.file_name %} {# Assuming 'material' object is passed in context for edit #}
+            <p><em>Arquivo atual: {{ material.file_name }}</em></p>
         {% endif %}
         
-        <p>{{ form.submit(class="btn btn-primary") }}</p>
+        <p>{{ form.submit(value='Salvar Material' if not is_edit else 'Atualizar Material', class="btn btn-primary") }}</p>
     </form>
 
-    <a href="{{ url_for('material.list_materials') }}">Back to Learning Materials List</a>
+    <a href="{{ url_for('material.list_materials') }}">Voltar para a Lista de Materiais de Estudo</a>
 {% endblock %}

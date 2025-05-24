@@ -9,22 +9,22 @@
 </head>
 <body>
     <nav>
-        <a href="{{ url_for('main.index') }}">Home</a> |
+        <a href="{{ url_for('main.index') }}">Início</a> |
         {% if current_user.is_authenticated %}
-            <span>Welcome, {{ current_user.username }}!</span> |
-            <a href="{{ url_for('calendar.month_view') }}">Calendar</a> |
-            <a href="{{ url_for('todo.list_tasks') }}">To-Do List</a> |
-            <a href="{{ url_for('location.list_locations') }}">Locations</a> |
-            <a href="{{ url_for('diagram.list_diagram_notes') }}">Diagram Notes</a> |
-            <a href="{{ url_for('code_snippet.list_code_snippets') }}">Code Snippets</a> |
-            <a href="{{ url_for('material.list_materials') }}">Learning Materials</a> |
-            <a href="{{ url_for('note.list_notes') }}">Quick Notes</a> |
-            <a href="{{ url_for('stats.statistics_page') }}">Statistics</a> |
-            <a href="{{ url_for('main.profile') }}">Profile</a> |
-            <a href="{{ url_for('auth.logout') }}">Logout</a>
+            <span>Bem-vindo(a), {{ current_user.username }}!</span> |
+            <a href="{{ url_for('calendar.month_view') }}">Calendário</a> |
+            <a href="{{ url_for('todo.list_tasks') }}">Lista de Tarefas</a> |
+            <a href="{{ url_for('location.list_locations') }}">Locais</a> |
+            <a href="{{ url_for('diagram.list_diagram_notes') }}">Notas de Diagrama</a> |
+            <a href="{{ url_for('code_snippet.list_code_snippets') }}">Fragmentos de Código</a> |
+            <a href="{{ url_for('material.list_materials') }}">Materiais de Estudo</a> |
+            <a href="{{ url_for('note.list_notes') }}">Notas Rápidas</a> |
+            <a href="{{ url_for('stats.statistics_page') }}">Estatísticas</a> |
+            <a href="{{ url_for('main.profile') }}">Perfil</a> |
+            <a href="{{ url_for('auth.logout') }}">Sair</a>
         {% else %}
-            <a href="{{ url_for('auth.login') }}">Login</a> |
-            <a href="{{ url_for('auth.register') }}">Register</a>
+            <a href="{{ url_for('auth.login') }}">Entrar</a> |
+            <a href="{{ url_for('auth.register') }}">Registrar</a>
         {% endif %}
         <!-- Add other navigation links here -->
     </nav>

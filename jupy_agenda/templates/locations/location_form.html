@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
 
 {% block content %}
-    <h2>{{ legend }}</h2>
+    <h2>{{ legend }}</h2> <!-- Dynamic legend -->
     <form method="POST" action=""> {# Action URL will be set by the route #}
         {{ form.hidden_tag() }} {# CSRF token #}
         
         <p>
-            {{ form.name.label }}<br>
+            {{ form.name.label(text='Nome') }}<br>
             {{ form.name(size=40, class="form-control") }}<br>
             {% if form.name.errors %}
                 <ul class="errors">
@@ -17,7 +17,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.address.label }}<br>
+            {{ form.address.label(text='Endereço') }}<br>
             {{ form.address(rows=3, cols=40, class="form-control") }}<br>
             {% if form.address.errors %}
                 <ul class="errors">
@@ -26,7 +26,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.description.label }}<br>
+            {{ form.description.label(text='Descrição') }}<br>
             {{ form.description(rows=5, cols=40, class="form-control") }}<br>
             {% if form.description.errors %}
                 <ul class="errors">
@@ -35,7 +35,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.latitude.label }} (e.g., 34.0522)<br>
+            {{ form.latitude.label(text='Latitude (ex: 34.0522)') }}<br>
             {{ form.latitude(class="form-control") }}<br>
             {% if form.latitude.errors %}
                 <ul class="errors">
@@ -44,7 +44,7 @@
             {% endif %}
         </p>
         <p>
-            {{ form.longitude.label }} (e.g., -118.2437)<br>
+            {{ form.longitude.label(text='Longitude (ex: -118.2437)') }}<br>
             {{ form.longitude(class="form-control") }}<br>
             {% if form.longitude.errors %}
                 <ul class="errors">
@@ -52,8 +52,8 @@
                 </ul>
             {% endif %}
         </p>
-        <p>{{ form.submit(class="btn btn-primary") }}</p>
+        <p>{{ form.submit(value='Salvar Local', class="btn btn-primary") }}</p>
     </form>
 
-    <a href="{{ url_for('location.list_locations') }}">Back to Locations List</a>
+    <a href="{{ url_for('location.list_locations') }}">Voltar para a Lista de Locais</a>
 {% endblock %}

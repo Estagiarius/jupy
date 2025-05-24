@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Event Reminder: {{ item.title }}</title>
+    <title>Lembrete de Evento: {{ item.title }}</title>
 </head>
 <body>
-    <p>Hi {{ user.username }},</p>
-    <p>This is a reminder for your upcoming event:</p>
+    <p>Olá {{ user.username }},</p>
+    <p>Este é um lembrete para o seu próximo evento:</p>
     
     <h3>{{ item.title }}</h3>
-    <p><strong>Starts:</strong> {{ item.start_time.strftime('%Y-%m-%d %H:%M:%S') }} UTC</p>
+    <p><strong>Início:</strong> {{ item.start_time.strftime('%Y-%m-%d %H:%M:%S') }} UTC</p>
     
     {% if item.description %}
-    <p><strong>Description:</strong></p>
+    <p><strong>Descrição:</strong></p>
     <p>{{ item.description | nl2br }}</p>
     {% endif %}
     
-    <p>You can view your calendar <a href="{{ url_for('calendar.month_view', _external=True) }}">here</a>.</p>
+    <p>Você pode visualizar seu calendário <a href="{{ url_for('calendar.month_view', _external=True) }}">aqui</a>.</p>
     
-    <p>Thanks,<br>Jupy Agenda Team</p>
+    <p>Atenciosamente,<br>Equipe Jupy Agenda</p>
 </body>
 </html>

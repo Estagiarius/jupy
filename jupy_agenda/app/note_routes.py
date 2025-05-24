@@ -63,11 +63,11 @@ def add_note():
             )
             db.session.add(new_note)
             db.session.commit()
-            flash('Quick note created successfully!', 'success')
+            flash('Nota rápida criada com sucesso!', 'success')
             return redirect(url_for('note.list_notes'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error creating quick note: {e}', 'danger')
+            flash(f'Erro ao criar nota rápida: {e}', 'danger')
     return render_template('notes/note_form.html', title='Add Quick Note', form=form, legend='New Quick Note')
 
 @note_bp.route('/edit/<int:note_id>', methods=['GET', 'POST'])
@@ -85,11 +85,11 @@ def edit_note(note_id):
             note.category = form.category.data.strip() if form.category.data else None
             note.updated_at = datetime.utcnow()
             db.session.commit()
-            flash('Quick note updated successfully!', 'success')
+            flash('Nota rápida atualizada com sucesso!', 'success')
             return redirect(url_for('note.list_notes'))
         except Exception as e:
             db.session.rollback()
-            flash(f'Error updating quick note: {e}', 'danger')
+            flash(f'Erro ao atualizar nota rápida: {e}', 'danger')
     return render_template('notes/note_form.html', title='Edit Quick Note', form=form, legend=f'Edit Note', note_id=note.id)
 
 @note_bp.route('/delete/<int:note_id>', methods=['POST']) # POST only for deletion
@@ -103,9 +103,9 @@ def delete_note(note_id):
     try:
         db.session.delete(note)
         db.session.commit()
-        flash('Quick note deleted successfully!', 'success')
+        flash('Nota rápida excluída com sucesso!', 'success')
     except Exception as e:
         db.session.rollback()
-        flash(f'Error deleting quick note: {e}', 'danger')
+        flash(f'Erro ao excluir nota rápida: {e}', 'danger')
     
     return redirect(url_for('note.list_notes'))
