@@ -229,6 +229,35 @@ Esta aplicação é configurada para ser implantada usando um servidor WSGI como
     
     Dado que `run.py` está em `jupy_agenda/run.py`, e `app` é criado lá, para o CLI do Flask, `FLASK_APP=jupy_agenda.run` (quando executado da raiz do projeto) ou `FLASK_APP=run.py` (quando executado de dentro da pasta `jupy_agenda`) é o mais provável.
 
+### Alternativa para Windows: Waitress
+
+Se você estiver desenvolvendo ou deseja simular um ambiente de produção no Windows, pode encontrar problemas ao tentar usar o Gunicorn, pois ele possui dependências específicas do Unix (como o módulo `fcntl` que não está disponível no Windows).
+
+Uma excelente alternativa multiplataforma e de qualidade de produção é o servidor WSGI **Waitress**. Ele é puramente Python e funciona bem no Windows.
+
+**1. Instalação do Waitress:**
+   O Waitress já foi adicionado ao arquivo `requirements.txt` do projeto. Se por algum motivo não estiver instalado, você pode instalá-lo com:
+   ```bash
+   pip install waitress
+   ```
+
+**2. Configurando Variáveis de Ambiente:**
+   Assim como para o Gunicorn, certifique-se de que suas variáveis de ambiente de produção estão configuradas. Estas são as mesmas variáveis mencionadas anteriormente:
+   - `FLASK_ENV=production`
+   - `SECRET_KEY=sua_chave_secreta_super_segura`
+   - `SQLALCHEMY_DATABASE_URI=postgresql://user:pass@host:port/dbname` (ou outro banco de produção)
+   - Configurações de `MAIL_...` para envio de email.
+
+**3. Executando a Aplicação com Waitress:**
+   Use o seguinte comando no seu terminal (dentro do ambiente virtual ativado), a partir da raiz do projeto (a pasta que contém a pasta `jupy_agenda`):
+   ```bash
+   waitress-serve --host 0.0.0.0 --port 5000 "jupy_agenda.app:create_app()"
+   ```
+   - Você pode ajustar `--host` (e.g., `127.0.0.1` para apenas local) e `--port` (e.g., `8000`) conforme necessário.
+   - A string `"jupy_agenda.app:create_app()"` aponta para a fábrica da sua aplicação Flask localizada em `jupy_agenda/app/__init__.py`.
+
+O Waitress é uma opção robusta e fácil de usar para servir aplicações Flask em ambientes Windows onde Gunicorn não é uma opção viável.
+
 ## Contribuições
 Contribuições são bem-vindas! Por favor, faça um fork do repositório, crie um branch para sua funcionalidade e envie um pull request.
 
