@@ -11,7 +11,7 @@ mail = Mail() # Initialize Mail
 
 def create_app(config_class=None): # Added config_class argument
     """Create and configure the Flask application."""
-    app = Flask(__name__, instance_relative_config=True) # instance_relative_config=True
+    app = Flask(__name__, instance_relative_config=True, template_folder='../templates') # instance_relative_config=True
 
     if config_class:
         app.config.from_object(config_class)
