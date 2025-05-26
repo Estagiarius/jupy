@@ -35,59 +35,6 @@ def list_tasks():
                            current_status_filter=status_filter,
                            current_sort_by=sort_by)
 
-@todo_bp.route('/task/add', methods=['GET', 'POST'])
-@login_required
-def add_task():
-    """Handles adding a new task."""
-    form = TaskForm()
-    # Default priority to 1 (Low) and status to 'pending' for new tasks if not set by form
-    if request.method == 'GET':
-        form.priority.data = 1 
-        form.status.data = 'pending'
-
-    if form.validate_on_submit():
-        try:
-            new_task = Task(
-                user_id=current_user.id,
-                description=form.description.data,
-                due_date=form.due_date.data,
-                priority=form.priority.data,
-                status=form.status.data
-            )
-            db.session.add(new_task)
-            db.session.commit()
-            flash('Tarefa criada com sucesso!', 'success')
-            return redirect(url_for('todo.list_tasks'))
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Erro ao criar tarefa: {e}', 'danger')
-            # app.logger.error(f"Error creating task: {e}") # For server-side logging
-    return render_template('todo/task_form.html', title='Add Task', form=form, legend='New Task')
-
-@todo_bp.route('/task/edit/<int:task_id>', methods=['GET', 'POST'])
-@login_required
-def edit_task(task_id):
-    """Handles editing an existing task."""
-    task = Task.query.get_or_404(task_id)
-    if task.user_id != current_user.id:
-        abort(403) # Forbidden
-
-    form = TaskForm(obj=task) # Pre-populate form with task data
-    if form.validate_on_submit():
-        try:
-            task.description = form.description.data
-            task.due_date = form.due_date.data
-            task.priority = form.priority.data
-            task.status = form.status.data
-            # updated_at is handled by the model's onupdate
-            db.session.commit()
-            flash('Tarefa atualizada com sucesso!', 'success')
-            return redirect(url_for('todo.list_tasks'))
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Erro ao atualizar tarefa: {e}', 'danger')
-    return render_template('todo/task_form.html', title='Edit Task', form=form, legend=f'Edit Task "{task.description[:30]}..."', task_id=task.id)
-
 @todo_bp.route('/task/delete/<int:task_id>', methods=['POST']) # POST only for deletion
 @login_required
 def delete_task(task_id):
