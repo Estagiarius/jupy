@@ -1,0 +1,15 @@
+Olá {{ user.username }},
+
+Este é um lembrete para o seu próximo evento:
+
+Título: {{ item.title }}
+Início: {{ item.start_time.strftime('%Y-%m-%d %H:%M:%S') }} UTC
+{% if item.description %}
+Descrição:
+{{ item.description }}
+{% endif %}
+
+Você pode visualizar seu calendário aqui: {{ url_for('calendar.month_view', _external=True) }}
+
+Atenciosamente,
+Equipe Jupy Agenda

@@ -1,0 +1,14 @@
+Olá {{ user.username }},
+
+Este é um lembrete para sua tarefa:
+
+Descrição: {{ item.description }}
+{% if item.due_date %}
+Data de Vencimento: {{ item.due_date.strftime('%Y-%m-%d') }}
+{% endif %}
+Prioridade: {{ item.priority_display }}
+
+Você pode visualizar sua Lista de Tarefas aqui: {{ url_for('todo.list_tasks', _external=True) }}
+
+Atenciosamente,
+Equipe Jupy Agenda

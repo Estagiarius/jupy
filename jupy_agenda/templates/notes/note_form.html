@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+    <h2>{{ legend }}</h2> <!-- Dynamic legend -->
+    <form method="POST" action=""> {# Action URL will be set by the route #}
+        {{ form.hidden_tag() }} {# CSRF token #}
+        
+        <p>
+            {{ form.content.label(text='Conteúdo da Nota') }}<br>
+            {{ form.content(rows=10, cols=70, class="form-control") }}<br>
+            {% if form.content.errors %}
+                <ul class="errors">
+                    {% for error in form.content.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.category.label(text='Categoria (Opcional)') }}<br>
+            {{ form.category(size=40, class="form-control") }}<br>
+            {% if form.category.errors %}
+                <ul class="errors">
+                    {% for error in form.category.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>{{ form.submit(value='Salvar Nota', class="btn btn-primary") }}</p>
+    </form>
+
+    <a href="{{ url_for('note.list_notes') }}">Voltar para a Lista de Notas Rápidas</a>
+{% endblock %}

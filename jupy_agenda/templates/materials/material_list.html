@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+<style>
+    .item-table { /* Generalizing class name */
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .item-table th, .item-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+    }
+    .item-table th {
+        background-color: #f2f2f2;
+    }
+    .item-actions a, .item-actions form {
+        margin-right: 5px;
+        display: inline; 
+    }
+    .pagination {
+        margin-top: 20px;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        color: #337ab7;
+    }
+    .pagination .active a {
+        background-color: #337ab7;
+        color: white;
+        border-color: #337ab7;
+    }
+    .pagination .disabled span {
+        margin: 0 5px;
+        padding: 8px 12px;
+        color: #777;
+        border: 1px solid #ddd;
+    }
+    .description-preview {
+        max-height: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal; /* Allow wrapping */
+        word-wrap: break-word;
+    }
+</style>
+
+<h2>{{ title }}</h2> <!-- Dynamic title -->
+
+<a href="{{ url_for('material.upload_material') }}" class="btn btn-primary">Fazer Upload de Novo Material</a>
+
+{% if materials_pagination.items %}
+<table class="item-table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Prévia da Descrição</th>
+            <th>Categoria</th>
+            <th>Nome do Arquivo</th>
+            <th>Data de Upload</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for material in materials_pagination.items %}
+        <tr>
+            <td>{{ material.title }}</td>
+            <td><div class="description-preview">{{ material.description if material.description else 'N/A' }}</div></td>
+            <td>{{ material.subject_category if material.subject_category else 'N/A' }}</td>
+            <td>{{ material.file_name }}</td>
+            <td>{{ material.upload_date.strftime('%Y-%m-%d') if material.upload_date else 'N/A' }}</td>
+            <td class="item-actions">
+                <a href="{{ url_for('material.download_material', material_id=material.id) }}" class="btn btn-sm btn-success">Baixar</a>
+                <a href="{{ url_for('material.edit_material', material_id=material.id) }}" class="btn btn-sm btn-info">Editar</a>
+                <form method="POST" action="{{ url_for('material.delete_material', material_id=material.id) }}" onsubmit="return confirm('Você tem certeza que deseja excluir este material e seu arquivo?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if materials_pagination.pages > 1 %}
+<nav class="pagination">
+    {% if materials_pagination.has_prev %}
+        <a href="{{ url_for('material.list_materials', page=materials_pagination.prev_num) }}">&laquo; Anterior</a>
+    {% else %}
+        <span class="disabled">&laquo; Anterior</span>
+    {% endif %}
+
+    {% for page_num in materials_pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if materials_pagination.page == page_num %}
+                <span class="active"><a href="{{ url_for('material.list_materials', page=page_num) }}">{{ page_num }}</a></span>
+            {% else %}
+                <a href="{{ url_for('material.list_materials', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            <span class="disabled">...</span>
+        {% endif %}
+    {% endfor %}
+
+    {% if materials_pagination.has_next %}
+        <a href="{{ url_for('material.list_materials', page=materials_pagination.next_num) }}">Próximo &raquo;</a>
+    {% else %}
+        <span class="disabled">Próximo &raquo;</span>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<p>Nenhum material de estudo encontrado. Que tal <a href="{{ url_for('material.upload_material') }}">fazer upload de um</a>?</p>
+{% endif %}
+
+{% endblock %}

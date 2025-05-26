@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Instance Folder
+instance/
+# Keep this line if you want to track the instance/.gitignore file itself but nothing else in instance/
+# !instance/.gitignore 
+
+# Virtual Environment
+.env
+env/
+venv/
+ENV/
+# Mac OS X
+.DS_Store
+
+# Application-specific
+database/agenda.db # Default SQLite database file (if not in instance/)
+# database/ # Or ignore the whole database directory if SQLite is always there for dev
+*.sqlite
+*.sqlite3
+
+# Test files
+.coverage
+htmlcov/
+.pytest_cache/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Secrets - ensure .env files or similar are not committed
+*.env
+.env.*
+
+# Log files
+*.log
+
+# OS generated files
+ehthumbs.db
+Thumbs.db

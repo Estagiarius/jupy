@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Added viewport meta tag -->
+    <title>{% block title %}Jupy Agenda{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- You might want to add more CSS or JS links here -->
+</head>
+<body>
+    <nav>
+        <a href="{{ url_for('main.index') }}">Início</a> |
+        {% if current_user.is_authenticated %}
+            <span>Bem-vindo(a), {{ current_user.username }}!</span> |
+            <a href="{{ url_for('calendar.month_view') }}">Calendário</a> |
+            <a href="{{ url_for('todo.list_tasks') }}">Lista de Tarefas</a> |
+            <a href="{{ url_for('location.list_locations') }}">Locais</a> |
+            <a href="{{ url_for('diagram.list_diagram_notes') }}">Notas de Diagrama</a> |
+            <a href="{{ url_for('code_snippet.list_code_snippets') }}">Fragmentos de Código</a> |
+            <a href="{{ url_for('material.list_materials') }}">Materiais de Estudo</a> |
+            <a href="{{ url_for('note.list_notes') }}">Notas Rápidas</a> |
+            <a href="{{ url_for('stats.statistics_page') }}">Estatísticas</a> |
+            <a href="{{ url_for('main.profile') }}">Perfil</a> |
+            <a href="{{ url_for('auth.logout') }}">Sair</a>
+        {% else %}
+            <a href="{{ url_for('auth.login') }}">Entrar</a> |
+            <a href="{{ url_for('auth.register') }}">Registrar</a>
+        {% endif %}
+        <!-- Add other navigation links here -->
+    </nav>
+    <hr>
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <!-- Chart.js CDN for statistics and reports -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <!-- You might want to add more JS links here -->
+</body>
+</html>

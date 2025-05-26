@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+<style>
+    .item-table { /* Generalizing class name for potential reuse */
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .item-table th, .item-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+    .item-table th {
+        background-color: #f2f2f2;
+    }
+    .item-actions a, .item-actions form {
+        margin-right: 5px;
+        display: inline; /* Keep buttons on the same line */
+    }
+    .pagination {
+        margin-top: 20px;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        color: #337ab7;
+    }
+    .pagination .active a {
+        background-color: #337ab7;
+        color: white;
+        border-color: #337ab7;
+    }
+    .pagination .disabled span {
+        margin: 0 5px;
+        padding: 8px 12px;
+        color: #777;
+        border: 1px solid #ddd;
+    }
+    .content-preview {
+        max-height: 60px; /* Limit height */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: pre-wrap; /* Respect newlines but wrap */
+        word-wrap: break-word;
+    }
+</style>
+
+<h2>{{ title }}</h2> <!-- Dynamic title -->
+
+<a href="{{ url_for('diagram.add_diagram_note') }}" class="btn btn-primary">Adicionar Nova Nota de Diagrama</a>
+
+{% if notes_pagination.items %}
+<table class="item-table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Prévia do Conteúdo</th>
+            <th>Última Atualização</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for note in notes_pagination.items %}
+        <tr>
+            <td><a href="{{ url_for('diagram.edit_diagram_note', note_id=note.id) }}">{{ note.title }}</a></td>
+            <td><div class="content-preview">{{ note.content if note.content else 'N/A' }}</div></td>
+            <td>{{ note.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td class="item-actions">
+                <a href="{{ url_for('diagram.edit_diagram_note', note_id=note.id) }}" class="btn btn-sm btn-info">Editar</a>
+                <form method="POST" action="{{ url_for('diagram.delete_diagram_note', note_id=note.id) }}" onsubmit="return confirm('Você tem certeza que deseja excluir esta nota de diagrama?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if notes_pagination.pages > 1 %}
+<nav class="pagination">
+    {% if notes_pagination.has_prev %}
+        <a href="{{ url_for('diagram.list_diagram_notes', page=notes_pagination.prev_num) }}">&laquo; Anterior</a>
+    {% else %}
+        <span class="disabled">&laquo; Anterior</span>
+    {% endif %}
+
+    {% for page_num in notes_pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if notes_pagination.page == page_num %}
+                <span class="active"><a href="{{ url_for('diagram.list_diagram_notes', page=page_num) }}">{{ page_num }}</a></span>
+            {% else %}
+                <a href="{{ url_for('diagram.list_diagram_notes', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            <span class="disabled">...</span>
+        {% endif %}
+    {% endfor %}
+
+    {% if notes_pagination.has_next %}
+        <a href="{{ url_for('diagram.list_diagram_notes', page=notes_pagination.next_num) }}">Próximo &raquo;</a>
+    {% else %}
+        <span class="disabled">Próximo &raquo;</span>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<p>Nenhuma nota de diagrama encontrada. Que tal <a href="{{ url_for('diagram.add_diagram_note') }}">adicionar uma</a>?</p>
+{% endif %}
+
+{% endblock %}

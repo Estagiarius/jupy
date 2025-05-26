@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+<style>
+    .item-table { /* Using the same general class as diagram_list.html for consistency */
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    .item-table th, .item-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+        vertical-align: top;
+    }
+    .item-table th {
+        background-color: #f2f2f2;
+    }
+    .item-actions a, .item-actions form {
+        margin-right: 5px;
+        display: inline; 
+    }
+    .pagination { /* Copied from diagram_list.html */
+        margin-top: 20px;
+    }
+    .pagination a {
+        margin: 0 5px;
+        padding: 8px 12px;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        color: #337ab7;
+    }
+    .pagination .active a {
+        background-color: #337ab7;
+        color: white;
+        border-color: #337ab7;
+    }
+    .pagination .disabled span {
+        margin: 0 5px;
+        padding: 8px 12px;
+        color: #777;
+        border: 1px solid #ddd;
+    }
+    .code-preview {
+        max-height: 100px; /* Limit height for list view */
+        overflow: auto; /* Add scrollbars if content exceeds max-height */
+        background-color: #f8f8f8;
+        border: 1px solid #eee;
+        padding: 5px;
+        font-family: monospace;
+        white-space: pre-wrap; /* Respect newlines and wrap if necessary */
+        word-wrap: break-word;
+    }
+</style>
+
+<h2>{{ title }}</h2> <!-- Dynamic title -->
+
+<a href="{{ url_for('code_snippet.add_code_snippet') }}" class="btn btn-primary">Adicionar Novo Fragmento de Código</a>
+
+{% if snippets_pagination.items %}
+<table class="item-table">
+    <thead>
+        <tr>
+            <th>Título</th>
+            <th>Linguagem (Dica)</th>
+            <th>Prévia do Fragmento</th>
+            <th>Última Atualização</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for snippet in snippets_pagination.items %}
+        <tr>
+            <td><a href="{{ url_for('code_snippet.view_code_snippet', snippet_id=snippet.id) }}">{{ snippet.title }}</a></td>
+            <td>{{ snippet.language_hint if snippet.language_hint else 'N/A' }}</td>
+            <td><div class="code-preview">{{ snippet.content | e }}</div></td> {# Ensure escaping for safety #}
+            <td>{{ snippet.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td class="item-actions">
+                <a href="{{ url_for('code_snippet.edit_code_snippet', snippet_id=snippet.id) }}" class="btn btn-sm btn-info">Editar</a>
+                <form method="POST" action="{{ url_for('code_snippet.delete_code_snippet', snippet_id=snippet.id) }}" onsubmit="return confirm('Você tem certeza que deseja excluir este fragmento de código?');">
+                    <button type="submit" class="btn btn-sm btn-danger">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if snippets_pagination.pages > 1 %}
+<nav class="pagination">
+    {% if snippets_pagination.has_prev %}
+        <a href="{{ url_for('code_snippet.list_code_snippets', page=snippets_pagination.prev_num) }}">&laquo; Anterior</a>
+    {% else %}
+        <span class="disabled">&laquo; Anterior</span>
+    {% endif %}
+
+    {% for page_num in snippets_pagination.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+            {% if snippets_pagination.page == page_num %}
+                <span class="active"><a href="{{ url_for('code_snippet.list_code_snippets', page=page_num) }}">{{ page_num }}</a></span>
+            {% else %}
+                <a href="{{ url_for('code_snippet.list_code_snippets', page=page_num) }}">{{ page_num }}</a>
+            {% endif %}
+        {% else %}
+            <span class="disabled">...</span>
+        {% endif %}
+    {% endfor %}
+
+    {% if snippets_pagination.has_next %}
+        <a href="{{ url_for('code_snippet.list_code_snippets', page=snippets_pagination.next_num) }}">Próximo &raquo;</a>
+    {% else %}
+        <span class="disabled">Próximo &raquo;</span>
+    {% endif %}
+</nav>
+{% endif %}
+
+{% else %}
+<p>Nenhum fragmento de código encontrado. Que tal <a href="{{ url_for('code_snippet.add_code_snippet') }}">adicionar um</a>?</p>
+{% endif %}
+
+{% endblock %}

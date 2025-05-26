@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+<style>
+    .snippet-details p {
+        margin-bottom: 10px;
+    }
+    .snippet-details strong {
+        margin-right: 5px;
+    }
+    .code-display-box {
+        background-color: #f8f9fa; /* Light grey background */
+        border: 1px solid #dee2e6; /* Softer border */
+        padding: 15px;
+        border-radius: 4px;
+        overflow-x: auto; /* Allow horizontal scrolling for long lines */
+        margin-top: 10px;
+        margin-bottom: 20px;
+    }
+    .code-display-box pre {
+        margin: 0; /* Remove default pre margin */
+        font-family: monospace;
+        white-space: pre-wrap; /* Wrap long lines but preserve formatting */
+        word-wrap: break-word; /* Break words if they are too long */
+    }
+</style>
+
+<h2>{{ snippet.title }}</h2> <!-- Title of the snippet -->
+
+<div class="snippet-details">
+    <p><strong>Título:</strong> {{ snippet.title }}</p>
+    
+    {% if snippet.language_hint %}
+    <p><strong>Linguagem (Dica):</strong> {{ snippet.language_hint }}</p>
+    {% endif %}
+    
+    <p><strong>Conteúdo:</strong></p>
+    <div class="code-display-box">
+        <pre><code>{{ snippet.content | e }}</code></pre> {# Ensure content is escaped #}
+    </div>
+
+    <p><strong>Criado em:</strong> {{ snippet.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    {% if snippet.updated_at and snippet.updated_at != snippet.created_at %}
+    <p><strong>Última Atualização:</strong> {{ snippet.updated_at.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    {% endif %}
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{{ url_for('code_snippet.edit_code_snippet', snippet_id=snippet.id) }}" class="btn btn-info">Editar Fragmento</a>
+    <a href="{{ url_for('code_snippet.list_code_snippets') }}" class="btn btn-secondary">Voltar para a Lista de Fragmentos</a>
+</div>
+
+{% endblock %}

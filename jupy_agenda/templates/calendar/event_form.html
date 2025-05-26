@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+    <h2>{{ legend }}</h2> <!-- Dynamic legend (e.g., "Novo Evento" or "Editar Evento") -->
+    <form method="POST" action=""> {# Action URL will be set by the route #}
+        {{ form.hidden_tag() }} {# CSRF token #}
+        
+        <p>
+            {{ form.title.label(text='Título') }}<br>
+            {{ form.title(size=40, class="form-control") }}<br>
+            {% if form.title.errors %}
+                <ul class="errors">
+                    {% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.description.label(text='Descrição') }}<br>
+            {{ form.description(rows=5, cols=40, class="form-control") }}<br>
+            {% if form.description.errors %}
+                <ul class="errors">
+                    {% for error in form.description.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.start_time.label(text='Hora de Início (AAAA-MM-DD HH:MM:SS)') }}<br>
+            {{ form.start_time(class="form-control") }}<br>
+            {% if form.start_time.errors %}
+                <ul class="errors">
+                    {% for error in form.start_time.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.end_time.label(text='Hora de Término (AAAA-MM-DD HH:MM:SS)') }}<br>
+            {{ form.end_time(class="form-control") }}<br>
+            {% if form.end_time.errors %}
+                <ul class="errors">
+                    {% for error in form.end_time.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>{{ form.submit(value='Salvar Evento', class="btn btn-primary") }}</p>
+    </form>
+
+    {% if event_id %}
+    <form method="POST" action="{{ url_for('calendar.delete_event', event_id=event_id) }}" style="margin-top: 20px;" onsubmit="return confirm('Você tem certeza que deseja excluir este evento?');">
+        <input type="submit" value="Excluir Evento" class="btn btn-danger">
+    </form>
+    {% endif %}
+
+    <a href="{{ url_for('calendar.month_view') }}">Voltar para o Calendário</a>
+{% endblock %}

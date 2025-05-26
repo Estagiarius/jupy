@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+    <h2>{{ legend }}</h2> <!-- Dynamic legend -->
+    <form method="POST" action=""> {# Action URL will be set by the route #}
+        {{ form.hidden_tag() }} {# CSRF token #}
+        
+        <p>
+            {{ form.title.label(text='Título') }}<br>
+            {{ form.title(size=60, class="form-control") }}<br>
+            {% if form.title.errors %}
+                <ul class="errors">
+                    {% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.content.label(text='Conteúdo (Diagrama em texto, notas, etc.)') }}<br>
+            {{ form.content(rows=15, cols=80, class="form-control", style="font-family: monospace;") }}<br>
+            {% if form.content.errors %}
+                <ul class="errors">
+                    {% for error in form.content.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>{{ form.submit(value='Salvar Nota de Diagrama', class="btn btn-primary") }}</p>
+    </form>
+
+    <a href="{{ url_for('diagram.list_diagram_notes') }}">Voltar para a Lista de Notas de Diagrama</a>
+{% endblock %}

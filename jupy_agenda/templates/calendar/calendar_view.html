@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Title is dynamic, set in routes -->
+
+{% block content %}
+<style>
+    .calendar-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .calendar-table th, .calendar-table td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+        vertical-align: top; /* Align content to the top of the cell */
+        height: 100px; /* Give some height to cells */
+    }
+    .calendar-table th {
+        background-color: #f2f2f2;
+    }
+    .calendar-day {
+        font-weight: bold;
+    }
+    .other-month {
+        color: #aaa;
+        background-color: #f9f9f9;
+    }
+    .today {
+        background-color: #e6ffe6; /* Today's date highlight */
+    }
+    .event-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 0.9em;
+    }
+    .event-list li {
+        margin-bottom: 3px;
+        padding: 2px;
+        background-color: #add8e6; /* Light blue for events */
+        border-radius: 3px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .event-link {
+        color: #333;
+        text-decoration: none;
+    }
+    .event-link:hover {
+        text-decoration: underline;
+    }
+    .calendar-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+</style>
+
+<div class="calendar-nav">
+    <a href="{{ url_for('calendar.month_view', year=prev_year, month=prev_month) }}" class="btn btn-secondary">&laquo; Mês Anterior</a>
+    <h2>{{ month_name }} {{ year }}</h2> <!-- month_name is already localized by Python's calendar module if locale is set -->
+    <a href="{{ url_for('calendar.month_view', year=next_year, month=next_month) }}" class="btn btn-secondary">Próximo Mês &raquo;</a>
+</div>
+
+<a href="{{ url_for('calendar.add_event') }}" class="btn btn-primary mb-3">Adicionar Novo Evento</a>
+
+<div class="table-wrapper"> <!-- Added table-wrapper -->
+<table class="calendar-table">
+    <thead>
+        <tr>
+            <th>Seg</th> <!-- Segunda-feira -->
+            <th>Ter</th> <!-- Terça-feira -->
+            <th>Qua</th> <!-- Quarta-feira -->
+            <th>Qui</th> <!-- Quinta-feira -->
+            <th>Sex</th> <!-- Sexta-feira -->
+            <th>Sáb</th> <!-- Sábado -->
+            <th>Dom</th> <!-- Domingo -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for week in month_days %}
+        <tr>
+            {% for day_date in week %}
+                {% set day_classes = [] %}
+                {% if day_date.month != month %}
+                    {% set day_classes = day_classes + ['other-month'] %}
+                {% endif %}
+                {% if day_date == today %}
+                    {% set day_classes = day_classes + ['today'] %}
+                {% endif %}
+                <td class="{{ day_classes|join(' ') }}">
+                    <div class="calendar-day">{{ day_date.day }}</div>
+                    {% if day_date in events_by_day %}
+                        <ul class="event-list">
+                            {% for event in events_by_day[day_date] %}
+                                <li>
+                                    <a href="{{ url_for('calendar.edit_event', event_id=event.id) }}" class="event-link" title="{{ event.title }} - {{ event.start_time.strftime('%H:%M') }}{% if event.description %} - {{ event.description[:30] }}...{% endif %}">
+                                        {{ event.title }}
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div> <!-- Close table-wrapper -->
+{% endblock %}

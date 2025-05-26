@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lembrete de Tarefa: {{ item.description[:50] }}...</title>
+</head>
+<body>
+    <p>Olá {{ user.username }},</p>
+    <p>Este é um lembrete para sua tarefa:</p>
+    
+    <p><strong>Descrição:</strong><br>{{ item.description | nl2br }}</p>
+    
+    {% if item.due_date %}
+    <p><strong>Data de Vencimento:</strong> {{ item.due_date.strftime('%Y-%m-%d') }}</p>
+    {% endif %}
+    <p><strong>Prioridade:</strong> {{ item.priority_display }}</p>
+    
+    <p>Você pode visualizar sua Lista de Tarefas <a href="{{ url_for('todo.list_tasks', _external=True) }}">aqui</a>.</p>
+    
+    <p>Atenciosamente,<br>Equipe Jupy Agenda</p>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %} <!-- Dynamic title -->
+
+{% block content %}
+    <h2>{{ legend }}</h2> <!-- Dynamic legend -->
+    <form method="POST" action=""> {# Action URL will be set by the route #}
+        {{ form.hidden_tag() }} {# CSRF token #}
+        
+        <p>
+            {{ form.title.label(text='Título') }}<br>
+            {{ form.title(size=60, class="form-control") }}<br>
+            {% if form.title.errors %}
+                <ul class="errors">
+                    {% for error in form.title.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.language_hint.label(text='Linguagem (ex: python, javascript, pseudocódigo)') }}<br>
+            {{ form.language_hint(size=60, class="form-control") }}<br>
+            {% if form.language_hint.errors %}
+                <ul class="errors">
+                    {% for error in form.language_hint.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>
+            {{ form.content.label(text='Fragmento de Código / Pseudocódigo') }}<br>
+            {{ form.content(rows=20, cols=80, class="form-control", style="font-family: monospace;") }}<br>
+            {% if form.content.errors %}
+                <ul class="errors">
+                    {% for error in form.content.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+            {% endif %}
+        </p>
+        <p>{{ form.submit(value='Salvar Fragmento de Código', class="btn btn-primary") }}</p>
+    </form>
+
+    <a href="{{ url_for('code_snippet.list_code_snippets') }}">Voltar para a Lista de Fragmentos de Código</a>
+{% endblock %}

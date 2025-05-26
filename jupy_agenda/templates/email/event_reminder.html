@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lembrete de Evento: {{ item.title }}</title>
+</head>
+<body>
+    <p>Olá {{ user.username }},</p>
+    <p>Este é um lembrete para o seu próximo evento:</p>
+    
+    <h3>{{ item.title }}</h3>
+    <p><strong>Início:</strong> {{ item.start_time.strftime('%Y-%m-%d %H:%M:%S') }} UTC</p>
+    
+    {% if item.description %}
+    <p><strong>Descrição:</strong></p>
+    <p>{{ item.description | nl2br }}</p>
+    {% endif %}
+    
+    <p>Você pode visualizar seu calendário <a href="{{ url_for('calendar.month_view', _external=True) }}">aqui</a>.</p>
+    
+    <p>Atenciosamente,<br>Equipe Jupy Agenda</p>
+</body>
+</html>
