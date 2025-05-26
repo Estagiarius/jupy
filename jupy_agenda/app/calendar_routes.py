@@ -70,63 +70,6 @@ def month_view(year=None, month=None):
                            month_name=calendar.month_name[month])
 
 
-@calendar_bp.route('/event/add', methods=['GET', 'POST'])
-@login_required
-def add_event():
-    """Handles adding a new event."""
-    form = EventForm()
-    if form.validate_on_submit():
-        try:
-            new_event = Event(
-                user_id=current_user.id,
-                title=form.title.data,
-                description=form.description.data,
-                start_time=form.start_time.data,
-                end_time=form.end_time.data
-            )
-            db.session.add(new_event)
-            db.session.commit()
-            flash('Event created successfully!', 'success')
-            return redirect(url_for('calendar.month_view', year=form.start_time.data.year, month=form.start_time.data.month))
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Error creating event: {e}', 'danger')
-    return render_template('calendar/event_form.html', title='Add Event', form=form, legend='New Event')
-
-
-@calendar_bp.route('/event/edit/<int:event_id>', methods=['GET', 'POST'])
-@login_required
-def edit_event(event_id):
-    """Handles editing an existing event."""
-    event = Event.query.get_or_404(event_id)
-    if event.user_id != current_user.id:
-        abort(403) # Forbidden
-
-    form = EventForm(obj=event) # Pre-populate form with event data
-    if form.validate_on_submit():
-        try:
-            event.title = form.title.data
-            event.description = form.description.data
-            event.start_time = form.start_time.data
-            event.end_time = form.end_time.data
-            # updated_at is handled by the model's onupdate
-            db.session.commit()
-            flash('Event updated successfully!', 'success')
-            return redirect(url_for('calendar.month_view', year=event.start_time.year, month=event.start_time.month))
-        except Exception as e:
-            db.session.rollback()
-            flash(f'Error updating event: {e}', 'danger')
-    
-    # For GET request, ensure form fields are populated correctly if obj didn't do it all
-    # (WTForms usually handles this well with `obj=event`)
-    # form.title.data = event.title 
-    # form.description.data = event.description
-    # form.start_time.data = event.start_time
-    # form.end_time.data = event.end_time
-            
-    return render_template('calendar/event_form.html', title='Edit Event', form=form, legend=f'Edit "{event.title}"', event_id=event.id)
-
-
 @calendar_bp.route('/event/delete/<int:event_id>', methods=['POST']) # POST only for deletion
 @login_required
 def delete_event(event_id):
