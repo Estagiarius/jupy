@@ -119,7 +119,7 @@ def create_app(config_class=None): # Added config_class argument
         # This might require importing models from various blueprints if not already done
         from . import models # Ensure all models in models.py are loaded
         
-        db.create_all()
+        # db.create_all()
         
         # Create upload folder if it doesn't exist (app.config['UPLOAD_FOLDER'] should be set by now)
         if not os.path.exists(app.config['UPLOAD_FOLDER']):
