@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 from jupy_agenda.app import create_app, db
 from jupy_agenda.app.models import Reminder, Event, Task, User # Import models for context
 from jupy_agenda.app.services.notification_service import send_email_reminder
