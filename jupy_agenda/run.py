@@ -88,6 +88,14 @@ def send_reminders_command():
         app.logger.info(f"Reminder processing complete. Sent: {sent_count}, Errors: {error_count}.")
 
 
+@app.cli.command("init-db")
+def init_db_command():
+    """Creates database tables."""
+    with app.app_context():
+        db.create_all()
+        click.echo("Initialized the database.")
+
+
 if __name__ == '__main__':
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
         """Runs the unit and functional tests."""
